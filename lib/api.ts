@@ -71,8 +71,12 @@ export const api = {
     getTickets: () =>
       request<Ticket[]>('/tickets'),
 
-    getProjects: () =>
-      request<Project[]>('/customers/me/projects'),
+    getProjects: async () => {
+      // 先获取当前客户信息，得到真实 customer ID
+      const customer = await request<Customer>('/customers/me');
+      // 再用真实 ID 获取项目列表
+      return request<Project[]>(`/customers/${customer.id}/projects`);
+    },
 
     getTicket: (id: string) =>
       request<Ticket>(`/tickets/${id}`),
