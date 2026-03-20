@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { api } from '@/lib/api';
-import type { Customer } from '@/lib/types';
+import type { Customer, User } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -18,12 +18,14 @@ export default function CustomersPage() {
   const preselectedCustomerId = searchParams.get('customerId');
 
   const [customers, setCustomers] = useState<Customer[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
+    userId: '',
     companyName: '',
     contactPhone: '',
     industry: '',
@@ -42,14 +44,25 @@ export default function CustomersPage() {
     }
   };
 
+  const fetchUsers = async () => {
+    try {
+      const data = await api.admin.getUsers();
+      // 只显示 customer 角色的用户
+      setUsers(data.filter(u => u.role === 'customer'));
+    } catch (error) {
+      console.error('Failed to fetch users:', error);
+    }
+  };
+
   useEffect(() => {
     fetchCustomers();
+    fetchUsers();
   }, []);
 
   // Reset form when dialog opens/closes
   useEffect(() => {
     if (!dialogOpen) {
-      setFormData({ companyName: '', contactPhone: '', industry: '', notes: '' });
+      setFormData({ userId: '', companyName: '', contactPhone: '', industry: '', notes: '' });
       setSelectedCustomer(null);
     }
   }, [dialogOpen]);
@@ -75,6 +88,7 @@ export default function CustomersPage() {
   const handleEditCustomer = (customer: Customer) => {
     setSelectedCustomer(customer);
     setFormData({
+      userId: customer.userId,
       companyName: customer.companyName,
       contactPhone: customer.contactPhone,
       industry: customer.industry,
@@ -149,6 +163,25 @@ export default function CustomersPage() {
         isSubmitting={isSubmitting}
       >
         <div className="space-y-4">
+          {!selectedCustomer && (
+            <div>
+              <Label htmlFor="userId">关联用户 *</Label>
+              <select
+                id="userId"
+                value={formData.userId}
+                onChange={(e) => setFormData({ ...formData, userId: e.target.value })}
+                className="w-full px-4 py-2 border border-border rounded-lg bg-background"
+                required
+              >
+                <option value="">请选择用户</option>
+                {users.map((user) => (
+                  <option key={user.id} value={user.id}>
+                    {user.name} ({user.email})
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
           <div>
             <Label htmlFor="companyName">公司名称 *</Label>
             <Input

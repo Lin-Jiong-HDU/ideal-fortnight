@@ -205,6 +205,7 @@ export const api = {
       request<Customer>(`/customers/${id}`),
 
     createCustomer: (data: {
+      userId: string;
       companyName: string;
       contactPhone?: string;
       industry?: string;
