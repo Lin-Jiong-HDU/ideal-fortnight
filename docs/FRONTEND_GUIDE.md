@@ -334,10 +334,15 @@ completed (我已通过，完成)
 
 | 接口 | 方法 | 角色 | 说明 |
 |------|------|------|------|
-| `/tickets` | GET | customer | 我的工单列表 |
+| `/tickets` | GET | **仅 customer** | 我的工单列表 |
 | `/tickets` | POST | customer | 创建工单 |
-| `/tickets/:id` | GET | customer | 工单详情 |
+| `/tickets/:id` | GET | **所有角色** | 工单详情 |
 | `/tickets/:id/review` | POST | customer | 审核工单 |
+
+> ⚠️ **重要权限区别**：
+> - `GET /tickets` (列表) 只返回**当前用户自己的工单**，仅限 customer 角色
+> - `GET /optimizer/tickets` (工单池) 返回**所有待处理工单**，admin/optimizer 使用此接口
+> - `GET /tickets/:id` (详情) **所有角色均可访问**
 
 ### 5.7 工单系统 - 优化师端
 
