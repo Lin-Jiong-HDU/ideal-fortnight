@@ -162,8 +162,10 @@ export default function UsersPage() {
               type="password"
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              minLength={6}
               required
             />
+            <p className="text-xs text-muted-foreground mt-1">至少 6 个字符</p>
           </div>
           <div>
             <Label htmlFor="name">姓名 *</Label>
