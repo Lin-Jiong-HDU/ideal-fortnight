@@ -134,6 +134,7 @@ export interface QuotaPackage {
   name: string;
   articles: number;
   price: number;
+  validDays: number;
   createdAt: string;
   updatedAt: string;
 }

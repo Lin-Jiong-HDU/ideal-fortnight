@@ -34,6 +34,7 @@ export default function QuotasPage() {
     name: '',
     articles: '',
     price: '',
+    validDays: '',
   });
 
   // Recharge dialog
@@ -99,6 +100,7 @@ export default function QuotasPage() {
         name: packageFormData.name,
         articles: parseInt(packageFormData.articles),
         price: parseFloat(packageFormData.price),
+        validDays: parseInt(packageFormData.validDays),
       };
 
       if (selectedPackage) {
@@ -123,12 +125,13 @@ export default function QuotasPage() {
       name: pkg.name,
       articles: pkg.articles.toString(),
       price: pkg.price.toString(),
+      validDays: pkg.validDays.toString(),
     });
     setPackageDialogOpen(true);
   };
 
   const resetPackageForm = () => {
-    setPackageFormData({ name: '', articles: '', price: '' });
+    setPackageFormData({ name: '', articles: '', price: '', validDays: '' });
     setSelectedPackage(null);
   };
 
@@ -300,6 +303,17 @@ export default function QuotasPage() {
               step="0.01"
               value={packageFormData.price}
               onChange={(e) => setPackageFormData({ ...packageFormData, price: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <Label htmlFor="validDays">有效天数（天）*</Label>
+            <Input
+              id="validDays"
+              type="number"
+              min="1"
+              value={packageFormData.validDays}
+              onChange={(e) => setPackageFormData({ ...packageFormData, validDays: e.target.value })}
               required
             />
           </div>
