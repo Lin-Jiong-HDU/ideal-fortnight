@@ -293,4 +293,4 @@ export const api = {
     }),
 };
 
-export type { Ticket, Customer, Project, User, TicketStatus, OptimizationRecord, QuotaPackage, QuotaHistory } from './types';
+export type { Ticket, Customer, Project, User, UserRole, TicketStatus, OptimizationRecord, QuotaPackage, QuotaHistory } from './types';
