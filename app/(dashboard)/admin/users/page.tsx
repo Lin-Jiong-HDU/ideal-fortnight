@@ -180,7 +180,7 @@ export default function UsersPage() {
               id="role"
               value={formData.role}
               onChange={(e) => setFormData({ ...formData, role: e.target.value as UserRole })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+              className="w-full px-4 py-2 border border-border rounded-lg bg-background"
               required
             >
               <option value="customer">客户</option>

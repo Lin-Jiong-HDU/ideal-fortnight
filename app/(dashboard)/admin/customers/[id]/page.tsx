@@ -37,7 +37,7 @@ export default function CustomerDetailPage({
   if (isLoading) {
     return (
       <div className="p-8">
-        <div className="text-center py-12 text-gray-500">
+        <div className="text-center py-12 text-muted-foreground">
           加载中...
         </div>
       </div>
@@ -47,7 +47,7 @@ export default function CustomerDetailPage({
   if (!customer) {
     return (
       <div className="p-8">
-        <div className="text-center py-12 text-gray-500">
+        <div className="text-center py-12 text-muted-foreground">
           客户不存在
         </div>
       </div>
@@ -79,23 +79,23 @@ export default function CustomerDetailPage({
           <CardContent>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <div className="text-sm text-gray-500">公司名称</div>
+                <div className="text-sm text-muted-foreground">公司名称</div>
                 <div className="font-medium">{customer.companyName}</div>
               </div>
               <div>
-                <div className="text-sm text-gray-500">行业</div>
+                <div className="text-sm text-muted-foreground">行业</div>
                 <div className="font-medium">{customer.industry || '-'}</div>
               </div>
               <div>
-                <div className="text-sm text-gray-500">联系电话</div>
+                <div className="text-sm text-muted-foreground">联系电话</div>
                 <div className="font-medium">{customer.contactPhone || '-'}</div>
               </div>
               <div>
-                <div className="text-sm text-gray-500">创建时间</div>
+                <div className="text-sm text-muted-foreground">创建时间</div>
                 <div className="font-medium">{new Date(customer.createdAt).toLocaleDateString()}</div>
               </div>
               <div className="col-span-2">
-                <div className="text-sm text-gray-500">备注</div>
+                <div className="text-sm text-muted-foreground">备注</div>
                 <div className="font-medium">{customer.notes || '-'}</div>
               </div>
             </div>
@@ -110,28 +110,28 @@ export default function CustomerDetailPage({
           <CardContent>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">总配额</span>
+                <span className="text-sm text-muted-foreground">总配额</span>
                 <span className="text-lg font-semibold">{customer.quotaTotal} 篇</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">已使用</span>
+                <span className="text-sm text-muted-foreground">已使用</span>
                 <span className="text-lg font-semibold">{customer.quotaUsed} 篇</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">剩余</span>
+                <span className="text-sm text-muted-foreground">剩余</span>
                 <Badge variant={quotaRemaining > 0 ? 'default' : 'destructive'}>
                   {quotaRemaining} 篇
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">到期时间</span>
+                <span className="text-sm text-muted-foreground">到期时间</span>
                 <span className="font-medium">
                   {new Date(customer.quotaExpireAt).toLocaleDateString()}
                 </span>
               </div>
               {/* Progress bar */}
               <div className="pt-2">
-                <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="w-full bg-muted rounded-full h-2">
                   <div
                     className={`h-2 rounded-full ${
                       quotaPercentage > 80 ? 'bg-red-500' : quotaPercentage > 50 ? 'bg-yellow-500' : 'bg-green-500'
@@ -139,7 +139,7 @@ export default function CustomerDetailPage({
                     style={{ width: `${Math.min(quotaPercentage, 100)}%` }}
                   />
                 </div>
-                <div className="text-xs text-gray-500 mt-1 text-right">
+                <div className="text-xs text-muted-foreground mt-1 text-right">
                   {quotaPercentage.toFixed(1)}% 已使用
                 </div>
               </div>

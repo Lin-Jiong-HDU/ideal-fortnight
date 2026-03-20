@@ -39,7 +39,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-muted to-muted/80">
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold">GEO 优化平台</CardTitle>
@@ -72,7 +72,7 @@ export default function LoginPage() {
               />
             </div>
             {error && (
-              <div className="text-sm text-red-500 bg-red-50 p-3 rounded-md">
+              <div className="text-sm text-red-600 dark:text-red-400 bg-red-500/10 p-3 rounded-md">
                 {error}
               </div>
             )}
@@ -80,7 +80,7 @@ export default function LoginPage() {
               {isLoading ? '登录中...' : '登录'}
             </Button>
           </form>
-          <div className="mt-6 text-sm text-gray-500">
+          <div className="mt-6 text-sm text-muted-foreground">
             <p className="font-medium mb-2">测试账号：</p>
             <div className="space-y-1 text-xs">
               <p>Admin: admin@test.com / admin123</p>

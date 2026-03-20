@@ -178,11 +178,11 @@ export default function NewProjectPage() {
             </Select>
           </div>
           {formData.customerId && (
-            <div className="p-4 bg-gray-50 rounded-lg">
-              <p className="text-sm text-gray-600">
+            <div className="p-4 bg-muted rounded-lg">
+              <p className="text-sm text-muted-foreground">
                 客户: {customers.find((c) => c.id === formData.customerId)?.companyName}
               </p>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 行业: {customers.find((c) => c.id === formData.customerId)?.industry || '未设置'}
               </p>
             </div>
@@ -349,7 +349,7 @@ export default function NewProjectPage() {
   if (isLoading) {
     return (
       <div className="p-8">
-        <div className="text-center py-12 text-gray-500">加载中...</div>
+        <div className="text-center py-12 text-muted-foreground">加载中...</div>
       </div>
     );
   }

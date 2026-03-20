@@ -74,7 +74,7 @@ export default function NewTicketPage() {
                 id="project"
                 value={formData.projectId}
                 onChange={(e) => setFormData({ ...formData, projectId: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-background"
                 required
               >
                 <option value="">请选择项目</option>
@@ -119,7 +119,7 @@ export default function NewTicketPage() {
                 id="needReview"
                 checked={formData.needReview}
                 onChange={(e) => setFormData({ ...formData, needReview: e.target.checked })}
-                className="w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+                className="w-5 h-5 text-primary rounded focus:ring-2 focus:ring-primary"
               />
               <Label htmlFor="needReview" className="cursor-pointer">
                 需要审核（交付后需要你审核通过才完成）
@@ -127,7 +127,7 @@ export default function NewTicketPage() {
             </div>
 
             {error && (
-              <div className="text-sm text-red-500 bg-red-50 p-3 rounded-md">
+              <div className="text-sm text-red-600 dark:text-red-400 bg-red-500/10 p-3 rounded-md">
                 {error}
               </div>
             )}
