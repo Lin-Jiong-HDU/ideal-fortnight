@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/lib/contexts/AuthContext';
 import { api } from '@/lib/api';
 import type { Project } from '@/lib/types';
 import { Button } from '@/components/ui/button';
@@ -12,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function NewTicketPage() {
   const router = useRouter();
+  const { user } = useAuth();
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
   const [formData, setFormData] = useState({
@@ -24,8 +26,13 @@ export default function NewTicketPage() {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // 加载项目列表
+  // 加载项目列表 - 仅客户角色加载
   useEffect(() => {
+    if (user?.role !== 'customer') {
+      setIsLoadingProjects(false);
+      return;
+    }
+
     const fetchProjects = async () => {
       try {
         const data = await api.customer.getProjects();
@@ -37,10 +44,17 @@ export default function NewTicketPage() {
       }
     };
     fetchProjects();
-  }, []);
+  }, [user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // 非客户角色不允许提交
+    if (user?.role !== 'customer') {
+      setError('只有客户角色可以创建工单');
+      return;
+    }
+
     setError('');
 
     if (!formData.projectId || !formData.title || !formData.content) {
@@ -66,6 +80,38 @@ export default function NewTicketPage() {
       setIsLoading(false);
     }
   };
+
+  // 非客户角色显示提示
+  if (user && user.role !== 'customer') {
+    return (
+      <div className="p-8 max-w-3xl mx-auto">
+        <div className="mb-6">
+          <Button variant="ghost" onClick={() => router.back()}>
+            ← 返回
+          </Button>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>⚠️ 无法创建工单</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-muted-foreground mb-4">
+              只有 <strong>客户</strong> 角色可以创建工单。
+            </p>
+            <p className="text-sm text-muted-foreground mb-6">
+              当前角色：<span className="font-medium">
+                {user.role === 'admin' ? '管理员' : user.role === 'optimizer' ? '优化师' : user.role}
+              </span>
+            </p>
+            <Button onClick={() => router.push('/tickets')}>
+              返回工单列表
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="p-8 max-w-3xl mx-auto">
