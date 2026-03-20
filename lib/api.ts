@@ -1,3 +1,5 @@
+import type { Ticket, Customer, Project, User, UserRole, CreateTicketRequest, OptimizationRecord, OptimizationStrategy, TargetAI } from '@/lib/types';
+
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
 // 统一请求处理
@@ -11,9 +13,9 @@ async function request<T>(
     token = localStorage.getItem('accessToken');
   }
 
-  const headers: HeadersInit = {
+  const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    ...options.headers,
+    ...(options.headers as Record<string, string>),
   };
 
   // 添加 Authorization header（仅在 token 存在时）

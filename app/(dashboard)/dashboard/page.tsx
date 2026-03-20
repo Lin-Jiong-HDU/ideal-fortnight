@@ -5,7 +5,7 @@ import { useAuth } from '@/lib/contexts/AuthContext';
 import { api } from '@/lib/api';
 import type { Ticket, Customer } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '@/components/ticket/ticket-status';
 import Link from 'next/link';
 
 export default function DashboardPage() {
