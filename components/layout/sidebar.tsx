@@ -1,7 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 
@@ -9,6 +10,7 @@ interface NavItem {
   label: string;
   href: string;
   icon: string;
+  subitems?: NavItem[];
 }
 
 const navItemsByRole: Record<string, NavItem[]> = {
@@ -17,12 +19,32 @@ const navItemsByRole: Record<string, NavItem[]> = {
     { label: '工单池', href: '/optimizer/tickets', icon: '📥' },
     { label: '我的工单', href: '/tickets', icon: '📋' },
     { label: '创建工单', href: '/tickets/new', icon: '➕' },
+    {
+      label: '管理中心',
+      href: '/admin',
+      icon: '⚙️',
+      subitems: [
+        { label: '用户管理', href: '/admin/users', icon: '👥' },
+        { label: '客户管理', href: '/admin/customers', icon: '🏢' },
+        { label: '配额管理', href: '/admin/quotas', icon: '💎' },
+        { label: '项目管理', href: '/admin/projects', icon: '📁' },
+      ],
+    },
   ],
   optimizer: [
     { label: '工作台', href: '/dashboard', icon: '📊' },
     { label: '工单池', href: '/optimizer/tickets', icon: '📥' },
     { label: '我的工单', href: '/tickets', icon: '📋' },
     { label: '创建工单', href: '/tickets/new', icon: '➕' },
+    {
+      label: '管理中心',
+      href: '/admin',
+      icon: '⚙️',
+      subitems: [
+        { label: '客户列表', href: '/admin/customers', icon: '🏢' },
+        { label: '项目列表', href: '/admin/projects', icon: '📁' },
+      ],
+    },
   ],
   customer: [
     { label: '工作台', href: '/dashboard', icon: '📊' },
@@ -33,11 +55,80 @@ const navItemsByRole: Record<string, NavItem[]> = {
 
 export function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
   const { user, logout } = useAuth();
+  const [expandedMenus, setExpandedMenus] = useState<Set<string>>(new Set());
 
   if (!user) return null;
 
   const navItems = navItemsByRole[user.role] || [];
+
+  const toggleMenu = (href: string) => {
+    setExpandedMenus((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(href)) {
+        newSet.delete(href);
+      } else {
+        newSet.add(href);
+      }
+      return newSet;
+    });
+  };
+
+  const isItemActive = (item: NavItem): boolean => {
+    if (pathname === item.href || pathname.startsWith(item.href + '/')) {
+      return true;
+    }
+    if (item.subitems) {
+      return item.subitems.some((subitem) => pathname === subitem.href || pathname.startsWith(subitem.href + '/'));
+    }
+    return false;
+  };
+
+  const renderNavItem = (item: NavItem, depth = 0) => {
+    const isActive = isItemActive(item);
+    const isExpanded = expandedMenus.has(item.href);
+    const hasSubitems = item.subitems && item.subitems.length > 0;
+
+    return (
+      <li key={item.href}>
+        <div
+          className={cn(
+            'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors cursor-pointer',
+            isActive
+              ? 'bg-blue-50 text-blue-600 font-medium'
+              : 'text-gray-700 hover:bg-gray-100',
+            depth > 0 && 'ml-4'
+          )}
+          onClick={() => {
+            if (hasSubitems) {
+              toggleMenu(item.href);
+            } else {
+              router.push(item.href);
+            }
+          }}
+        >
+          <span className="text-lg">{item.icon}</span>
+          <span className="flex-1">{item.label}</span>
+          {hasSubitems && (
+            <span
+              className={cn(
+                'transition-transform',
+                isExpanded ? 'rotate-90' : ''
+              )}
+            >
+              ▶
+            </span>
+          )}
+        </div>
+        {hasSubitems && isExpanded && (
+          <ul className="mt-1 space-y-1">
+            {item.subitems!.map((subitem) => renderNavItem(subitem, depth + 1))}
+          </ul>
+        )}
+      </li>
+    );
+  };
 
   return (
     <aside className="w-64 bg-white border-r border-gray-200 flex flex-col h-screen sticky top-0">
@@ -50,27 +141,7 @@ export function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 p-4">
-        <ul className="space-y-2">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
-            return (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className={cn(
-                    'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
-                    isActive
-                      ? 'bg-blue-50 text-blue-600 font-medium'
-                      : 'text-gray-700 hover:bg-gray-100'
-                  )}
-                >
-                  <span className="text-lg">{item.icon}</span>
-                  <span>{item.label}</span>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+        <ul className="space-y-2">{navItems.map((item) => renderNavItem(item))}</ul>
       </nav>
 
       {/* User Info */}

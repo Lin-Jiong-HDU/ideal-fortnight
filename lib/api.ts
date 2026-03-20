@@ -1,3 +1,5 @@
+import type { Ticket, Customer, Project, User, UserRole, CreateTicketRequest, OptimizationRecord, OptimizationStrategy, TargetAI, QuotaPackage, QuotaHistory } from '@/lib/types';
+
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
 // 统一请求处理
@@ -11,9 +13,9 @@ async function request<T>(
     token = localStorage.getItem('accessToken');
   }
 
-  const headers: HeadersInit = {
+  const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    ...options.headers,
+    ...(options.headers as Record<string, string>),
   };
 
   // 添加 Authorization header（仅在 token 存在时）
@@ -169,6 +171,127 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ approved, comment }),
     }),
+
+  // 管理员 API
+  admin: {
+    // 用户管理
+    getUsers: () =>
+      request<User[]>('/users'),
+
+    getUser: (id: string) =>
+      request<User>(`/users/${id}`),
+
+    createUser: (data: {
+      email: string;
+      password: string;
+      name: string;
+      role: UserRole;
+    }) =>
+      request<User>('/users', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
+
+    deleteUser: (id: string) =>
+      request<{ message: string }>(`/users/${id}`, {
+        method: 'DELETE',
+      }),
+
+    // 客户管理
+    getCustomers: () =>
+      request<Customer[]>('/customers'),
+
+    getCustomer: (id: string) =>
+      request<Customer>(`/customers/${id}`),
+
+    createCustomer: (data: {
+      companyName: string;
+      contactPhone?: string;
+      industry?: string;
+      notes?: string;
+    }) =>
+      request<Customer>('/customers', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
+
+    updateCustomer: (id: string, data: {
+      companyName?: string;
+      contactPhone?: string;
+      industry?: string;
+      notes?: string;
+    }) =>
+      request<Customer>(`/customers/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      }),
+
+    // 配额管理
+    getQuotaPackages: () =>
+      request<QuotaPackage[]>('/quota-packages'),
+
+    createQuotaPackage: (data: {
+      name: string;
+      articles: number;
+      price: number;
+    }) =>
+      request<QuotaPackage>('/quota-packages', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
+
+    updateQuotaPackage: (id: string, data: {
+      name?: string;
+      articles?: number;
+      price?: number;
+    }) =>
+      request<QuotaPackage>(`/quota-packages/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      }),
+
+    rechargeQuota: (customerId: string, data: {
+      packageId: string;
+      remark: string;
+    }) =>
+      request<{ message: string }>(`/customers/${customerId}/quota`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
+
+    getQuotaHistory: (customerId: string) =>
+      request<QuotaHistory[]>(`/customers/${customerId}/quota/history`),
+
+    // 项目管理
+    getProjects: () =>
+      request<Project[]>('/projects'),
+
+    getProject: (id: string) =>
+      request<Project>(`/projects/${id}`),
+
+    createProject: (data: {
+      customerId: string;
+      name: string;
+      description?: string;
+      enterpriseInfo: Project['enterpriseInfo'];
+      competitorInfo: Project['competitorInfo'];
+    }) =>
+      request<Project>('/projects', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
+
+    updateProject: (id: string, data: Partial<Project>) =>
+      request<Project>(`/projects/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      }),
+
+    deleteProject: (id: string) =>
+      request<{ message: string }>(`/projects/${id}`, {
+        method: 'DELETE',
+      }),
+  },
 };
 
-export type { Ticket, Customer, Project, User, TicketStatus, OptimizationRecord } from './types';
+export type { Ticket, Customer, Project, User, UserRole, TicketStatus, OptimizationRecord, QuotaPackage, QuotaHistory } from './types';

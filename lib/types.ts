@@ -127,3 +127,26 @@ export type OptimizationStrategy = 'structure' | 'schema' | 'answer_first' | 'au
 
 // 目标 AI 平台
 export type TargetAI = 'chatgpt' | 'perplexity' | 'google_ai' | 'claude';
+
+// 配额包
+export interface QuotaPackage {
+  id: string;
+  name: string;
+  articles: number;
+  price: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// 配额历史
+export interface QuotaHistory {
+  id: string;
+  customerId: string;
+  customerName: string;
+  packageId: string;
+  packageName: string;
+  amount: number;
+  remark: string;
+  operatedBy: string;
+  operatedAt: string;
+}
