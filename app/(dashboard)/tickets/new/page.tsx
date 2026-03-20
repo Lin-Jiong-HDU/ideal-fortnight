@@ -1,22 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
+import type { Project } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-// 模拟项目数据（实际应该从 API 获取）
-const mockProjects = [
-  { id: '1', name: '某某科技官网项目' },
-  { id: '2', name: '产品介绍页面' },
-];
-
 export default function NewTicketPage() {
   const router = useRouter();
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [isLoadingProjects, setIsLoadingProjects] = useState(true);
   const [formData, setFormData] = useState({
     projectId: '',
     title: '',
@@ -25,6 +22,21 @@ export default function NewTicketPage() {
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  // 加载项目列表
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const data = await api.customer.getProjects();
+        setProjects(data);
+      } catch (err) {
+        console.error('Failed to fetch projects:', err);
+      } finally {
+        setIsLoadingProjects(false);
+      }
+    };
+    fetchProjects();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,14 +88,22 @@ export default function NewTicketPage() {
                 onChange={(e) => setFormData({ ...formData, projectId: e.target.value })}
                 className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-background"
                 required
+                disabled={isLoadingProjects}
               >
-                <option value="">请选择项目</option>
-                {mockProjects.map((project) => (
+                <option value="">
+                  {isLoadingProjects ? '加载中...' : '请选择项目'}
+                </option>
+                {projects.map((project) => (
                   <option key={project.id} value={project.id}>
                     {project.name}
                   </option>
                 ))}
               </select>
+              {projects.length === 0 && !isLoadingProjects && (
+                <p className="text-sm text-muted-foreground">
+                  暂无可用项目，请先联系管理员创建项目
+                </p>
+              )}
             </div>
 
             {/* 工单标题 */}

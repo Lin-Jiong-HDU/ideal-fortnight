@@ -71,6 +71,9 @@ export const api = {
     getTickets: () =>
       request<Ticket[]>('/tickets'),
 
+    getProjects: () =>
+      request<Project[]>('/customers/me/projects'),
+
     getTicket: (id: string) =>
       request<Ticket>(`/tickets/${id}`),
 
