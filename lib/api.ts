@@ -5,17 +5,23 @@ async function request<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
-  const token = typeof window !== 'undefined'
-    ? localStorage.getItem('accessToken')
-    : null;
+  // 确保只在浏览器环境获取 token
+  let token = null;
+  if (typeof window !== 'undefined') {
+    token = localStorage.getItem('accessToken');
+  }
 
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
     ...options.headers,
   };
 
+  // 添加 Authorization header（仅在 token 存在时）
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
+    console.log('[API] Request with token:', token.substring(0, 20) + '...');
+  } else {
+    console.log('[API] Request without token:', endpoint);
   }
 
   try {
