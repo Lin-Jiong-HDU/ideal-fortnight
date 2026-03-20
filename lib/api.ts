@@ -72,8 +72,8 @@ export const api = {
       request<Ticket[]>('/tickets'),
 
     getProjects: () =>
-      // /projects 会自动根据当前用户角色过滤
-      request<Project[]>('/projects'),
+      // 使用 customer 专用端点获取当前客户的项目列表
+      request<Project[]>('/customers/me/projects'),
 
     getTicket: (id: string) =>
       request<Ticket>(`/tickets/${id}`),

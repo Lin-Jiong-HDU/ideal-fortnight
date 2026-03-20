@@ -305,10 +305,15 @@ completed (我已通过，完成)
 | 接口 | 方法 | 角色 | 说明 |
 |------|------|------|------|
 | `/customers` | GET | admin/optimizer | 客户列表 |
-| `/customers/:id` | GET | admin/optimizer/customer | 客户详情 |
+| `/customers/me` | GET | **仅 customer** | 当前登录客户的档案 |
+| `/customers/:id` | GET | admin/optimizer | 客户详情 |
 | `/customers` | POST | admin | 创建客户档案 |
 | `/customers/:id` | PUT | admin | 更新客户档案 |
 | `/customers/:id/projects` | GET | admin/optimizer/customer | 客户的项目列表 |
+
+> ⚠️ **重要**：
+> - Customer 角色使用 `GET /customers/me` 获取自己的档案
+> - Admin/Optimizer 使用 `GET /customers/:id` 查看指定客户详情
 
 ### 5.4 配额管理
 
@@ -324,11 +329,18 @@ completed (我已通过，完成)
 
 | 接口 | 方法 | 角色 | 说明 |
 |------|------|------|------|
-| `/projects` | GET | 全部 | 项目列表（按角色过滤） |
-| `/projects/:id` | GET | 全部 | 项目详情 |
-| `/projects` | POST | admin/optimizer/customer | 创建项目 |
-| `/projects/:id` | PUT | admin/optimizer/customer | 更新项目 |
+| `/projects` | GET | **所有角色** | 项目列表（customer 只看自己的） |
+| `/projects/:id` | GET | **所有角色** | 项目详情 |
+| `/projects` | POST | admin/optimizer | 创建项目 |
+| `/projects/:id` | PUT | admin/optimizer | 更新项目 |
 | `/projects/:id` | DELETE | admin | 删除项目 |
+| `/customers/me/projects` | GET | **仅 customer** | 当前客户的项目列表 |
+
+> ⚠️ **重要权限区别**：
+> - `GET /projects` 返回结果按角色过滤：
+>   - admin/optimizer：返回所有项目
+>   - customer：只返回该客户自己的项目
+> - `GET /customers/me/projects` 是 customer 专用的项目列表接口
 
 ### 5.6 工单系统 - 客户端
 
