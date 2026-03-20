@@ -1,5 +1,6 @@
 'use client';
 
+import { ReactNode } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -12,13 +13,14 @@ import { Button } from '@/components/ui/button';
 
 interface ConfirmDialogProps {
   title: string;
-  message: string;
+  message?: string;
   confirmLabel?: string;
   cancelLabel?: string;
   variant?: 'default' | 'destructive';
   open: boolean;
   onClose: () => void;
   onConfirm: () => void;
+  children?: ReactNode;
 }
 
 export function ConfirmDialog({
@@ -30,6 +32,7 @@ export function ConfirmDialog({
   open,
   onClose,
   onConfirm,
+  children,
 }: ConfirmDialogProps) {
   const handleConfirm = () => {
     onConfirm();
@@ -41,8 +44,9 @@ export function ConfirmDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{message}</DialogDescription>
+          {message && <DialogDescription>{message}</DialogDescription>}
         </DialogHeader>
+        {children}
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>
             {cancelLabel}
