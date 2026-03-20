@@ -15,7 +15,7 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <button className="w-full px-4 py-2 text-sm text-gray-700 rounded-lg opacity-50">
+      <button className="w-full px-4 py-2 text-sm text-muted-foreground rounded-lg opacity-50">
         加载中...
       </button>
     );
@@ -32,7 +32,7 @@ export function ThemeToggle() {
   return (
     <MenuPrimitive.Root>
       <MenuPrimitive.Trigger
-        className="w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors flex items-center gap-2"
+        className="w-full px-4 py-2 text-sm text-foreground hover:bg-muted rounded-lg transition-colors flex items-center gap-2"
         aria-label={`当前主题：${currentTheme.label}`}
       >
         <span>{currentTheme.icon}</span>
@@ -40,7 +40,7 @@ export function ThemeToggle() {
       </MenuPrimitive.Trigger>
       <MenuPrimitive.Portal>
         <MenuPrimitive.Positioner className="z-50">
-          <MenuPrimitive.Popup className="min-w-[150px] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-1">
+          <MenuPrimitive.Popup className="min-w-[150px] bg-card border border-border rounded-lg shadow-lg p-1">
             {themes.map((t) => (
               <MenuPrimitive.Item
                 key={t.value}
@@ -49,8 +49,8 @@ export function ThemeToggle() {
                 className={`
                   px-3 py-2 text-sm rounded-md cursor-pointer
                   ${theme === t.value
-                    ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium'
-                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                    ? 'bg-primary/10 text-primary font-medium'
+                    : 'text-foreground hover:bg-muted'
                   }
                 `}
               >
