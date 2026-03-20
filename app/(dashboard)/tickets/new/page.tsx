@@ -38,7 +38,7 @@ export default function NewTicketPage() {
     setIsLoading(true);
 
     try {
-      await api.createTicket({
+      await api.customer.createTicket({
         projectId: formData.projectId,
         title: formData.title,
         content: formData.content,

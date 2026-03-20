@@ -22,7 +22,7 @@ export default function TicketDetailPage({ params }: { params: { id: string } })
   useEffect(() => {
     const fetchTicket = async () => {
       try {
-        const data = await api.getTicket(params.id);
+        const data = await api.customer.getTicket(params.id);
         setTicket(data);
       } catch (error) {
         console.error('Failed to fetch ticket:', error);
@@ -45,7 +45,7 @@ export default function TicketDetailPage({ params }: { params: { id: string } })
     setMessage('');
 
     try {
-      await api.reviewTicket(params.id, approved, reviewComment);
+      await api.customer.reviewTicket(params.id, approved, reviewComment);
 
       if (approved) {
         setMessage('✅ 审核通过！');

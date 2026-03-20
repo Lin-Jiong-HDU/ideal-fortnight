@@ -28,7 +28,10 @@ export default function TicketsPage() {
   const fetchTickets = async () => {
     setIsLoading(true);
     try {
-      const data = await api.getTickets();
+      // 根据角色调用不同的 API
+      const data = await (user?.role === 'customer'
+        ? api.customer.getTickets()
+        : api.optimizer.getTickets());
       setTickets(data);
     } catch (error) {
       console.error('Failed to fetch tickets:', error);

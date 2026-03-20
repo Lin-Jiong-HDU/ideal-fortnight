@@ -17,9 +17,10 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [ticketsData] = await Promise.all([
-          api.getTickets(),
-        ]);
+        // 根据角色调用不同的 API
+        const ticketsData = await (user?.role === 'customer'
+          ? api.customer.getTickets()
+          : api.optimizer.getTickets());
 
         setTickets(ticketsData);
 

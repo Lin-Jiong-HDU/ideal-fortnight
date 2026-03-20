@@ -64,13 +64,57 @@ export const api = {
       body: JSON.stringify({ email, password }),
     }),
 
-  // 工单
-  getTickets: () =>
-    request<Ticket[]>('/tickets'),
+  // 客户工单 API (仅 customer 角色)
+  customer: {
+    getTickets: () =>
+      request<Ticket[]>('/tickets'),
 
-  getTicket: (id: string) =>
-    request<Ticket>(`/tickets/${id}`),
+    getTicket: (id: string) =>
+      request<Ticket>(`/tickets/${id}`),
 
+    createTicket: (data: {
+      projectId: string;
+      title: string;
+      content: string;
+      sourceType?: string;
+      sourceFileUrl?: string;
+      needReview?: boolean;
+    }) =>
+      request<Ticket>('/tickets', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
+
+    reviewTicket: (id: string, approved: boolean, comment: string) =>
+      request<{ message: string }>(`/tickets/${id}/review`, {
+        method: 'POST',
+        body: JSON.stringify({ approved, comment }),
+      }),
+  },
+
+  // 优化器工单 API (admin 和 optimizer 角色)
+  optimizer: {
+    getTickets: () =>
+      request<Ticket[]>('/optimizer/tickets'),
+
+    claimTicket: (id: string) =>
+      request<{ message: string }>(`/optimizer/tickets/${id}/claim`, {
+        method: 'POST',
+      }),
+
+    optimizeTicket: (id: string) =>
+      request<{ message: string }>(`/optimizer/tickets/${id}/optimize`, {
+        method: 'POST',
+      }),
+  },
+
+  // 客户信息
+  getCustomerMe: () =>
+    request<Customer>('/customers/me'),
+
+  // 向后兼容的别名（默认使用 customer API）
+  getTickets: () => request<Ticket[]>('/tickets'),
+  getTicket: (id: string) => request<Ticket>(`/tickets/${id}`),
   createTicket: (data: {
     projectId: string;
     title: string;
@@ -83,16 +127,11 @@ export const api = {
       method: 'POST',
       body: JSON.stringify(data),
     }),
-
   reviewTicket: (id: string, approved: boolean, comment: string) =>
     request<{ message: string }>(`/tickets/${id}/review`, {
       method: 'POST',
       body: JSON.stringify({ approved, comment }),
     }),
-
-  // 客户
-  getCustomerMe: () =>
-    request<Customer>('/customers/me'),
 };
 
 export type { Ticket, Customer, Project, User, TicketStatus } from './types';
