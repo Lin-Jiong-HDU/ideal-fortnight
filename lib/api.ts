@@ -72,15 +72,10 @@ export const api = {
       request<Ticket[]>('/tickets'),
 
     getProjects: async () => {
-      // 从工单列表获取当前客户的 ID（因为 /customers/me 端点在后端也有问题）
-      const tickets = await request<Ticket[]>('/tickets');
-      if (tickets.length === 0) {
-        return []; // 没有工单，也没有项目
-      }
-      // 取第一个工单的 customerId
-      const customerId = tickets[0].customerId;
-      // 用真实 ID 获取项目列表
-      return request<Project[]>(`/customers/${customerId}/projects`);
+      // 先获取当前客户信息，得到真实 customer ID
+      const customer = await request<Customer>('/customers/me');
+      // 再用真实 ID 获取项目列表
+      return request<Project[]>(`/customers/${customer.id}/projects`);
     },
 
     getTicket: (id: string) =>
