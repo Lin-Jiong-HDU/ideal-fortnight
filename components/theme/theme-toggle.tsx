@@ -15,7 +15,7 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <button className="w-full px-4 py-2 text-sm text-muted-foreground rounded-lg opacity-50">
+      <button className="px-4 py-2 text-sm text-muted-foreground rounded-lg opacity-50">
         加载中...
       </button>
     );
@@ -32,7 +32,7 @@ export function ThemeToggle() {
   return (
     <MenuPrimitive.Root>
       <MenuPrimitive.Trigger
-        className="w-full px-4 py-2 text-sm text-foreground hover:bg-muted rounded-lg transition-colors flex items-center gap-2"
+        className="px-4 py-2 text-sm text-foreground hover:bg-muted rounded-lg transition-colors flex items-center gap-2"
         aria-label={`当前主题：${currentTheme.label}`}
       >
         <span>{currentTheme.icon}</span>
