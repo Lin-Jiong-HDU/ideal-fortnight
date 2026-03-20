@@ -36,10 +36,10 @@ export function StepWizard({
               className={cn(
                 'w-10 h-10 rounded-full flex items-center justify-center font-medium',
                 currentStep === index
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-primary text-primary-foreground'
                   : currentStep > index
-                  ? 'bg-green-600 text-white'
-                  : 'bg-gray-200 text-gray-500'
+                  ? 'bg-green-600 text-white dark:bg-green-700'
+                  : 'bg-muted text-muted-foreground'
               )}
             >
               {index + 1}
@@ -48,12 +48,12 @@ export function StepWizard({
               <div
                 className={cn(
                   'w-16 h-1 mx-2',
-                  currentStep > index ? 'bg-green-600' : 'bg-gray-200'
+                  currentStep > index ? 'bg-green-600 dark:bg-green-700' : 'bg-muted'
                 )}
               />
             )}
             {index < steps.length - 1 && (
-              <div className="ml-4 text-sm text-gray-500">{step.title}</div>
+              <div className="ml-4 text-sm text-muted-foreground">{step.title}</div>
             )}
           </div>
         ))}

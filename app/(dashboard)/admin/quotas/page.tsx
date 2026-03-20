@@ -218,11 +218,11 @@ export default function QuotasPage() {
         </CardHeader>
         <CardContent>
           {isLoading ? (
-            <div className="text-center py-12 text-gray-500">
+            <div className="text-center py-12 text-muted-foreground">
               加载中...
             </div>
           ) : packages.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">
+            <div className="text-center py-12 text-muted-foreground">
               暂无套餐
             </div>
           ) : (
@@ -249,7 +249,7 @@ export default function QuotasPage() {
           </CardHeader>
           <CardContent>
             {quotaHistory.length === 0 ? (
-              <div className="text-center py-12 text-gray-500">
+              <div className="text-center py-12 text-muted-foreground">
                 暂无充值记录
               </div>
             ) : (
@@ -346,10 +346,10 @@ export default function QuotasPage() {
               <button
                 key={customer.id}
                 onClick={() => handleRechargeCustomerSelect(customer)}
-                className="w-full text-left p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+                className="w-full text-left p-4 border rounded-lg hover:bg-muted transition-colors"
               >
                 <div className="font-medium">{customer.companyName}</div>
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-muted-foreground">
                   当前配额: {customer.quotaUsed}/{customer.quotaTotal} 篇
                 </div>
               </button>
@@ -363,10 +363,10 @@ export default function QuotasPage() {
               <button
                 key={pkg.id}
                 onClick={() => handleRechargePackageSelect(pkg)}
-                className="w-full text-left p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+                className="w-full text-left p-4 border rounded-lg hover:bg-muted transition-colors"
               >
                 <div className="font-medium">{pkg.name}</div>
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-muted-foreground">
                   {pkg.articles} 篇 - ¥{pkg.price}
                 </div>
               </button>
@@ -377,18 +377,18 @@ export default function QuotasPage() {
         {rechargeStep === 'confirm' && (
           <div className="space-y-4">
             <div>
-              <div className="text-sm text-gray-500">客户</div>
+              <div className="text-sm text-muted-foreground">客户</div>
               <div className="font-medium">{selectedCustomer?.companyName}</div>
             </div>
             <div>
-              <div className="text-sm text-gray-500">套餐</div>
+              <div className="text-sm text-muted-foreground">套餐</div>
               <div className="font-medium">
                 {selectedPackageForRecharge?.name} - {selectedPackageForRecharge?.articles} 篇
               </div>
             </div>
             <div>
-              <div className="text-sm text-gray-500">价格</div>
-              <div className="font-medium text-lg text-blue-600">
+              <div className="text-sm text-muted-foreground">价格</div>
+              <div className="font-medium text-lg text-primary">
                 ¥{selectedPackageForRecharge?.price}
               </div>
             </div>
@@ -401,7 +401,7 @@ export default function QuotasPage() {
                 placeholder="选填"
               />
             </div>
-            <div className="bg-yellow-50 p-3 rounded-lg text-sm text-yellow-800">
+            <div className="bg-yellow-500/10 p-3 rounded-lg text-sm text-yellow-600 dark:text-yellow-400">
               确认要为 {selectedCustomer?.companyName} 充值 {selectedPackageForRecharge?.articles} 篇吗？
             </div>
           </div>

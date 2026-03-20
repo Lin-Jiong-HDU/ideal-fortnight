@@ -26,7 +26,7 @@ export function DataTable<T extends object>({
 }: DataTableProps<T>) {
   if (isLoading) {
     return (
-      <div className="text-center py-12 text-gray-500">
+      <div className="text-center py-12 text-muted-foreground">
         加载中...
       </div>
     );
@@ -34,7 +34,7 @@ export function DataTable<T extends object>({
 
   if (data.length === 0) {
     return (
-      <div className="text-center py-12 text-gray-500">
+      <div className="text-center py-12 text-muted-foreground">
         {emptyMessage}
       </div>
     );
@@ -44,11 +44,11 @@ export function DataTable<T extends object>({
     <div className="overflow-x-auto">
       <table className="w-full">
         <thead>
-          <tr className="border-b border-gray-200">
+          <tr className="border-b border-border">
             {columns.map((column) => (
               <th
                 key={column.key}
-                className="px-4 py-3 text-left text-sm font-medium text-gray-700"
+                className="px-4 py-3 text-left text-sm font-medium text-foreground"
               >
                 {column.label}
               </th>
@@ -59,13 +59,13 @@ export function DataTable<T extends object>({
           {data.map((item, index) => (
             <tr
               key={index}
-              className={`border-b border-gray-100 hover:bg-gray-50 transition-colors ${
+              className={`border-b border-border hover:bg-muted transition-colors ${
                 onRowClick ? 'cursor-pointer' : ''
               }`}
               onClick={() => onRowClick?.(item)}
             >
               {columns.map((column) => (
-                <td key={column.key} className="px-4 py-3 text-sm text-gray-900">
+                <td key={column.key} className="px-4 py-3 text-sm text-foreground">
                   {column.render ? column.render(item) : String((item as Record<string, unknown>)[column.key])}
                 </td>
               ))}

@@ -77,13 +77,13 @@ export default function DashboardPage() {
           {customer && (
             <Card>
               <CardHeader>
-                <CardTitle className="text-sm font-medium text-gray-500">配额剩余</CardTitle>
+                <CardTitle className="text-sm font-medium text-muted-foreground">配额剩余</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold">
                   {customer.quotaTotal - customer.quotaUsed}/{customer.quotaTotal}
                 </div>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                   过期时间: {new Date(customer.quotaExpireAt).toLocaleDateString()}
                 </p>
               </CardContent>
@@ -91,7 +91,7 @@ export default function DashboardPage() {
           )}
           <Card>
             <CardHeader>
-              <CardTitle className="text-sm font-medium text-gray-500">待审核</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">待审核</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold">{pendingReview}</div>
@@ -99,7 +99,7 @@ export default function DashboardPage() {
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle className="text-sm font-medium text-gray-500">已完成</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">已完成</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold">{completed}</div>
@@ -114,19 +114,19 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             {recentTickets.length === 0 ? (
-              <p className="text-gray-500 text-center py-8">暂无工单</p>
+              <p className="text-muted-foreground text-center py-8">暂无工单</p>
             ) : (
               <div className="space-y-3">
                 {recentTickets.map((ticket) => (
                   <Link
                     key={ticket.id}
                     href={`/tickets/${ticket.id}`}
-                    className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="block p-4 border border-border rounded-lg hover:bg-muted transition-colors"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
                         <p className="font-medium">📄 {ticket.title}</p>
-                        <p className="text-sm text-gray-500 mt-1">
+                        <p className="text-sm text-muted-foreground mt-1">
                           {new Date(ticket.createdAt).toLocaleString()}
                         </p>
                       </div>
@@ -156,7 +156,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium text-gray-500">待处理</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">待处理</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">{pending}</div>
@@ -164,7 +164,7 @@ export default function DashboardPage() {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium text-gray-500">进行中</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">进行中</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">{processing}</div>
@@ -172,7 +172,7 @@ export default function DashboardPage() {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm font-medium text-gray-500">已完成</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">已完成</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">{completed}</div>
@@ -187,19 +187,19 @@ export default function DashboardPage() {
         </CardHeader>
         <CardContent>
           {recentTickets.length === 0 ? (
-            <p className="text-gray-500 text-center py-8">暂无工单</p>
+            <p className="text-muted-foreground text-center py-8">暂无工单</p>
           ) : (
             <div className="space-y-3">
               {recentTickets.map((ticket) => (
                 <Link
                   key={ticket.id}
                   href={`/tickets/${ticket.id}`}
-                  className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="block p-4 border border-border rounded-lg hover:bg-muted transition-colors"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
                       <p className="font-medium">📄 {ticket.title}</p>
-                      <p className="text-sm text-gray-500 mt-1">
+                      <p className="text-sm text-muted-foreground mt-1">
                         {new Date(ticket.createdAt).toLocaleString()}
                       </p>
                     </div>

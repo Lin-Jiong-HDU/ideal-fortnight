@@ -76,8 +76,8 @@ export default function TicketsPage() {
             onClick={() => setFilter(item.value)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               filter === item.value
-                ? 'bg-blue-600 text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-100'
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-background text-foreground hover:bg-muted'
             }`}
           >
             {item.label}
@@ -87,10 +87,10 @@ export default function TicketsPage() {
 
       {/* 工单列表 */}
       {isLoading ? (
-        <div className="text-center py-12 text-gray-500">加载中...</div>
+        <div className="text-center py-12 text-muted-foreground">加载中...</div>
       ) : filteredTickets.length === 0 ? (
         <Card className="p-12 text-center">
-          <p className="text-gray-500">暂无工单</p>
+          <p className="text-muted-foreground">暂无工单</p>
         </Card>
       ) : (
         <div className="grid gap-4">
@@ -105,20 +105,20 @@ export default function TicketsPage() {
                   <h3 className="font-semibold text-lg mb-2">
                     📄 {ticket.title}
                   </h3>
-                  <p className="text-sm text-gray-500 mb-3">
+                  <p className="text-sm text-muted-foreground mb-3">
                     项目：{ticket.project?.name || '未分配'}  |  创建于 {new Date(ticket.createdAt).toLocaleDateString()}
                   </p>
                   {ticket.originalContent && (
-                    <p className="text-sm text-gray-600 line-clamp-2">
+                    <p className="text-sm text-muted-foreground line-clamp-2">
                       {ticket.originalContent.slice(0, 150)}...
                     </p>
                   )}
                   {ticket.scoreAfter > 0 && (
                     <div className="mt-3 text-sm">
-                      <span className="text-gray-500">优化前：{ticket.scoreBefore}</span>
+                      <span className="text-muted-foreground">优化前：{ticket.scoreBefore}</span>
                       <span className="mx-2">→</span>
-                      <span className="text-gray-500">优化后：{ticket.scoreAfter}</span>
-                      <span className="ml-2 text-green-600 font-medium">
+                      <span className="text-muted-foreground">优化后：{ticket.scoreAfter}</span>
+                      <span className="ml-2 text-green-600 dark:text-green-400 font-medium">
                         (+{(ticket.scoreAfter - ticket.scoreBefore).toFixed(1)})
                       </span>
                     </div>

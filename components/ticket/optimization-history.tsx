@@ -31,7 +31,7 @@ export function OptimizationHistory({ ticketId }: OptimizationHistoryProps) {
   }, [ticketId]);
 
   if (isLoading) {
-    return <div className="text-center py-4 text-gray-500">加载中...</div>;
+    return <div className="text-center py-4 text-muted-foreground">加载中...</div>;
   }
 
   if (optimizations.length === 0) {
@@ -70,15 +70,15 @@ export function OptimizationHistory({ ticketId }: OptimizationHistoryProps) {
               >
                 <div className={`p-4 rounded-lg border-2 ${
                   isLatest
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-200 bg-white'
+                    ? 'border-primary bg-primary/10 dark:bg-primary/20'
+                    : 'border-border bg-background'
                 }`}>
                   <div className="flex items-center justify-between mb-2">
                     <div>
                       <span className="font-medium">
                         v{versionNumber} {isLatest && '(当前)'}
                       </span>
-                      <span className="text-gray-500 ml-3">
+                      <span className="text-muted-foreground ml-3">
                         {new Date(opt.createdAt).toLocaleString()}
                       </span>
                     </div>
@@ -87,24 +87,24 @@ export function OptimizationHistory({ ticketId }: OptimizationHistoryProps) {
                         评分：<span className="font-medium">{opt.scoreAfter}</span>
                       </span>
                       {opt.scoreAfter > opt.scoreBefore && (
-                        <span className="text-sm text-green-600 font-medium">
+                        <span className="text-sm text-green-600 dark:text-green-400 font-medium">
                           (+{(opt.scoreAfter - opt.scoreBefore).toFixed(1)})
                         </span>
                       )}
                     </div>
                   </div>
 
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-muted-foreground">
                     策略：{opt.strategies.join(', ') || '无'}
                   </div>
 
                   {showCompare && (
-                    <div className="mt-3 pt-3 border-t border-gray-200">
+                    <div className="mt-3 pt-3 border-t border-border">
                       <details className="cursor-pointer">
-                        <summary className="text-sm text-gray-500 hover:text-gray-700">
+                        <summary className="text-sm text-muted-foreground hover:text-foreground">
                           查看完整内容
                         </summary>
-                        <div className="mt-2 p-3 bg-gray-50 rounded text-sm max-h-64 overflow-y-auto">
+                        <div className="mt-2 p-3 bg-muted rounded text-sm max-h-64 overflow-y-auto">
                           <pre className="whitespace-pre-wrap">
                             {opt.optimizedContent}
                           </pre>

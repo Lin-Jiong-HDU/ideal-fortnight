@@ -77,11 +77,11 @@ export default function ProjectsPage() {
       </div>
 
       {isLoading ? (
-        <div className="text-center py-12 text-gray-500">加载中...</div>
+        <div className="text-center py-12 text-muted-foreground">加载中...</div>
       ) : projects.length === 0 ? (
         <Card>
           <CardContent className="text-center py-12">
-            <p className="text-gray-500 mb-4">暂无项目</p>
+            <p className="text-muted-foreground mb-4">暂无项目</p>
             <Button onClick={() => router.push('/admin/projects/new')}>
               创建第一个项目
             </Button>
@@ -100,16 +100,16 @@ export default function ProjectsPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2 text-sm">
-                  <div className="flex items-center text-gray-600">
+                  <div className="flex items-center text-muted-foreground">
                     <span className="font-medium mr-2">客户:</span>
                     <span>{getCustomerName(project.customerId)}</span>
                   </div>
                   {project.description && (
-                    <div className="text-gray-600 line-clamp-2">
+                    <div className="text-muted-foreground line-clamp-2">
                       {project.description}
                     </div>
                   )}
-                  <div className="text-xs text-gray-400">
+                  <div className="text-xs text-muted-foreground">
                     创建于 {new Date(project.createdAt).toLocaleDateString()}
                   </div>
                   <Button

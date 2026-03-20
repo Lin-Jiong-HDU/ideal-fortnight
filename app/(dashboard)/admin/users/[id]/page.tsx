@@ -35,7 +35,7 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
     return (
       <div className="p-8">
         <Card className="p-12 text-center">
-          <p className="text-gray-500">用户不存在</p>
+          <p className="text-muted-foreground">用户不存在</p>
           <Button onClick={() => router.push('/admin/users')} className="mt-4">
             返回列表
           </Button>
@@ -64,19 +64,19 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <p className="text-sm text-gray-500">邮箱</p>
+            <p className="text-sm text-muted-foreground">邮箱</p>
             <p className="font-medium">{user.email}</p>
           </div>
           <div>
-            <p className="text-sm text-gray-500">姓名</p>
+            <p className="text-sm text-muted-foreground">姓名</p>
             <p className="font-medium">{user.name}</p>
           </div>
           <div>
-            <p className="text-sm text-gray-500">角色</p>
+            <p className="text-sm text-muted-foreground">角色</p>
             <p className="font-medium">{roleLabels[user.role]}</p>
           </div>
           <div>
-            <p className="text-sm text-gray-500">创建时间</p>
+            <p className="text-sm text-muted-foreground">创建时间</p>
             <p className="font-medium">{new Date(user.createdAt).toLocaleString()}</p>
           </div>
         </CardContent>

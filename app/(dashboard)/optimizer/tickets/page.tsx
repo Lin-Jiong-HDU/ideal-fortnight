@@ -61,19 +61,19 @@ export default function OptimizerTicketsPage() {
       </div>
 
       {/* 统计信息 */}
-      <div className="mb-6 p-4 bg-blue-50 rounded-lg">
-        <p className="text-blue-700">
+      <div className="mb-6 p-4 bg-primary/10 rounded-lg">
+        <p className="text-primary">
           当前有 <span className="font-bold">{pendingTickets.length}</span> 个待领取工单
         </p>
       </div>
 
       {/* 工单列表 */}
       {isLoading ? (
-        <div className="text-center py-12 text-gray-500">加载中...</div>
+        <div className="text-center py-12 text-muted-foreground">加载中...</div>
       ) : pendingTickets.length === 0 ? (
         <Card className="p-12 text-center">
-          <p className="text-gray-500 mb-4">🎉 暂无待处理工单</p>
-          <p className="text-sm text-gray-400">有新工单时会出现在这里</p>
+          <p className="text-muted-foreground mb-4">🎉 暂无待处理工单</p>
+          <p className="text-sm text-muted-foreground">有新工单时会出现在这里</p>
         </Card>
       ) : (
         <div className="grid gap-4">
@@ -84,11 +84,11 @@ export default function OptimizerTicketsPage() {
                   <h3 className="font-semibold text-lg mb-2">
                     📄 {ticket.title}
                   </h3>
-                  <p className="text-sm text-gray-500 mb-3">
+                  <p className="text-sm text-muted-foreground mb-3">
                     客户：{ticket.customer?.companyName || '未分配'}  |  创建于 {new Date(ticket.createdAt).toLocaleString()}
                   </p>
                   {ticket.originalContent && (
-                    <p className="text-sm text-gray-600 line-clamp-2">
+                    <p className="text-sm text-muted-foreground line-clamp-2">
                       {ticket.originalContent.slice(0, 150)}...
                     </p>
                   )}

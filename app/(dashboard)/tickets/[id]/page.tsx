@@ -201,7 +201,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
     return (
       <div className="p-8">
         <Card className="p-12 text-center">
-          <p className="text-gray-500">工单不存在</p>
+          <p className="text-muted-foreground">工单不存在</p>
           <Button onClick={() => router.push('/tickets')} className="mt-4">
             返回列表
           </Button>
@@ -223,7 +223,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
       {/* 工单标题和状态 */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold mb-2">📄 {ticket.title}</h1>
-        <div className="flex items-center gap-4 text-sm text-gray-500">
+        <div className="flex items-center gap-4 text-sm text-muted-foreground">
           <span>状态：<Badge status={ticket.status} /></span>
           <span>创建于 {new Date(ticket.createdAt).toLocaleString()}</span>
         </div>
@@ -235,17 +235,17 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
           <CardContent className="p-6">
             <div className="flex items-center justify-center gap-8">
               <div className="text-center">
-                <p className="text-sm text-gray-500 mb-1">优化前评分</p>
-                <p className="text-3xl font-bold text-gray-700">{ticket.scoreBefore}</p>
+                <p className="text-sm text-muted-foreground mb-1">优化前评分</p>
+                <p className="text-3xl font-bold text-foreground">{ticket.scoreBefore}</p>
               </div>
-              <div className="text-2xl text-gray-400">→</div>
+              <div className="text-2xl text-muted-foreground">→</div>
               <div className="text-center">
-                <p className="text-sm text-gray-500 mb-1">优化后评分</p>
-                <p className="text-3xl font-bold text-green-600">{ticket.scoreAfter}</p>
+                <p className="text-sm text-muted-foreground mb-1">优化后评分</p>
+                <p className="text-3xl font-bold text-green-600 dark:text-green-400">{ticket.scoreAfter}</p>
               </div>
               <div className="text-center">
-                <p className="text-sm text-gray-500 mb-1">提升</p>
-                <p className="text-2xl font-bold text-green-600">
+                <p className="text-sm text-muted-foreground mb-1">提升</p>
+                <p className="text-2xl font-bold text-green-600 dark:text-green-400">
                   +{(ticket.scoreAfter - ticket.scoreBefore).toFixed(1)}
                 </p>
               </div>
@@ -267,7 +267,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
           <CardContent className="p-6">
             <h2 className="text-lg font-semibold mb-4">优化后内容</h2>
             <div className="prose max-w-none">
-              <pre className="whitespace-pre-wrap text-gray-700 bg-gray-50 p-4 rounded-lg">
+              <pre className="whitespace-pre-wrap text-foreground bg-muted p-4 rounded-lg">
                 {ticket.optimizedContent}
               </pre>
             </div>
@@ -280,7 +280,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
         <CardContent className="p-6">
           <h2 className="text-lg font-semibold mb-4">原始内容</h2>
           <div className="prose max-w-none">
-            <pre className="whitespace-pre-wrap text-gray-600 text-sm">
+            <pre className="whitespace-pre-wrap text-muted-foreground text-sm">
               {ticket.originalContent}
             </pre>
           </div>
@@ -295,14 +295,14 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
             <Card>
               <CardContent className="p-6">
                 <h2 className="text-lg font-semibold mb-4">开始处理</h2>
-                <p className="text-gray-600 mb-4">领取后点击下方按钮开始处理工单</p>
+                <p className="text-muted-foreground mb-4">领取后点击下方按钮开始处理工单</p>
                 {message && !message.includes('✓') && !message.includes('✅') && (
-                  <div className="text-sm text-red-500 bg-red-50 p-3 rounded-md mb-4">
+                  <div className="text-sm text-red-600 dark:text-red-400 bg-red-500/10 p-3 rounded-md mb-4">
                     {message}
                   </div>
                 )}
                 {message && (message.includes('✓') || message.includes('✅')) && (
-                  <div className="text-sm text-green-700 bg-green-50 p-3 rounded-md mb-4">
+                  <div className="text-sm text-green-600 dark:text-green-400 bg-green-500/10 p-3 rounded-md mb-4">
                     {message}
                   </div>
                 )}
@@ -328,8 +328,8 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
                         key={strategy.value}
                         className={`flex items-start p-4 border-2 rounded-lg cursor-pointer transition-colors ${
                           optimizationForm.strategies.includes(strategy.value)
-                            ? 'border-blue-500 bg-blue-50'
-                            : 'border-gray-200 hover:border-gray-300'
+                            ? 'border-primary bg-primary/10 dark:bg-primary/20'
+                            : 'border-border hover:border-muted-foreground'
                         }`}
                       >
                         <input
@@ -345,7 +345,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
                         />
                         <div>
                           <p className="font-medium">{strategy.label}</p>
-                          <p className="text-sm text-gray-500">{strategy.desc}</p>
+                          <p className="text-sm text-muted-foreground">{strategy.desc}</p>
                         </div>
                       </label>
                     ))}
@@ -361,8 +361,8 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
                         key={platform.value}
                         className={`px-4 py-2 rounded-lg border-2 cursor-pointer transition-colors ${
                           optimizationForm.targetAI.includes(platform.value)
-                            ? 'border-blue-500 bg-blue-50 text-blue-700'
-                            : 'border-gray-200 hover:border-gray-300'
+                            ? 'border-primary bg-primary/10 text-primary dark:bg-primary/20'
+                            : 'border-border hover:border-muted-foreground'
                         }`}
                       >
                         <input
@@ -394,12 +394,12 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
                 </div>
 
                 {message && !message.includes('✓') && !message.includes('✅') && (
-                  <div className="text-sm text-red-500 bg-red-50 p-3 rounded-md mb-4">
+                  <div className="text-sm text-red-600 dark:text-red-400 bg-red-500/10 p-3 rounded-md mb-4">
                     {message}
                   </div>
                 )}
                 {message && (message.includes('✓') || message.includes('✅')) && (
-                  <div className="text-sm text-green-700 bg-green-50 p-3 rounded-md mb-4">
+                  <div className="text-sm text-green-600 dark:text-green-400 bg-green-500/10 p-3 rounded-md mb-4">
                     {message}
                   </div>
                 )}
@@ -417,19 +417,19 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
               <CardContent className="p-6">
                 <h2 className="text-lg font-semibold mb-4">优化结果</h2>
 
-                <div className="flex items-center gap-8 mb-4 p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-8 mb-4 p-4 bg-muted rounded-lg">
                   <div>
-                    <p className="text-sm text-gray-500">优化前</p>
+                    <p className="text-sm text-muted-foreground">优化前</p>
                     <p className="text-2xl font-bold">{optimizedResult.scoreBefore}</p>
                   </div>
                   <div className="text-2xl">→</div>
                   <div>
-                    <p className="text-sm text-gray-500">优化后</p>
-                    <p className="text-2xl font-bold text-green-600">{optimizedResult.scoreAfter}</p>
+                    <p className="text-sm text-muted-foreground">优化后</p>
+                    <p className="text-2xl font-bold text-green-600 dark:text-green-400">{optimizedResult.scoreAfter}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">提升</p>
-                    <p className="text-2xl font-bold text-green-600">
+                    <p className="text-sm text-muted-foreground">提升</p>
+                    <p className="text-2xl font-bold text-green-600 dark:text-green-400">
                       +{(optimizedResult.scoreAfter - optimizedResult.scoreBefore).toFixed(1)}
                     </p>
                   </div>
@@ -437,7 +437,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
 
                 <div className="mb-4">
                   <label className="block text-sm font-medium mb-2">优化后内容预览</label>
-                  <div className="p-4 bg-gray-50 rounded-lg max-h-64 overflow-y-auto">
+                  <div className="p-4 bg-muted rounded-lg max-h-64 overflow-y-auto">
                     <pre className="whitespace-pre-wrap text-sm">
                       {optimizedResult.content.slice(0, 500)}...
                     </pre>
@@ -445,12 +445,12 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
                 </div>
 
                 {message && !message.includes('✓') && !message.includes('✅') && (
-                  <div className="text-sm text-red-500 bg-red-50 p-3 rounded-md mb-4">
+                  <div className="text-sm text-red-600 dark:text-red-400 bg-red-500/10 p-3 rounded-md mb-4">
                     {message}
                   </div>
                 )}
                 {message && (message.includes('✓') || message.includes('✅')) && (
-                  <div className="text-sm text-green-700 bg-green-50 p-3 rounded-md mb-4">
+                  <div className="text-sm text-green-600 dark:text-green-400 bg-green-500/10 p-3 rounded-md mb-4">
                     {message}
                   </div>
                 )}
@@ -488,8 +488,8 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
               {message && (
                 <div className={`text-sm p-3 rounded-md ${
                   message.includes('✅') || message.includes('✓')
-                    ? 'bg-green-50 text-green-700'
-                    : 'bg-red-50 text-red-700'
+                    ? 'bg-green-500/10 text-green-600 dark:text-green-400'
+                    : 'bg-red-500/10 text-red-600 dark:text-red-400'
                 }`}>
                   {message}
                 </div>
@@ -498,7 +498,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
                 <Button
                   onClick={() => handleReview(true)}
                   disabled={isSubmitting}
-                  className="bg-green-600 hover:bg-green-700"
+                  className="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800"
                 >
                   ✅ 通过
                 </Button>
@@ -506,7 +506,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
                   onClick={() => handleReview(false)}
                   disabled={isSubmitting}
                   variant="outline"
-                  className="border-red-300 text-red-600 hover:bg-red-50"
+                  className="border-red-300 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950"
                 >
                   ❌ 打回
                 </Button>

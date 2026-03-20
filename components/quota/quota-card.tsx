@@ -16,7 +16,7 @@ export function QuotaCard({ quota, onEdit }: QuotaCardProps) {
         <div className="flex items-start justify-between mb-4">
           <div>
             <h3 className="text-lg font-semibold">{quota.name}</h3>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm text-muted-foreground mt-1">
               {quota.articles} 篇章 · {quota.validDays} 天有效
             </p>
           </div>
@@ -30,7 +30,7 @@ export function QuotaCard({ quota, onEdit }: QuotaCardProps) {
             </Button>
           )}
         </div>
-        <div className="text-2xl font-bold text-blue-600">
+        <div className="text-2xl font-bold text-primary">
           ¥{quota.price}
         </div>
       </CardContent>
