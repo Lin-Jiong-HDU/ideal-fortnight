@@ -254,8 +254,9 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
         </Card>
       )}
 
-      {/* 优化历史记录 */}
-      {ticket.status !== 'pending' && ticket.status !== 'assigned' && (
+      {/* 优化历史记录 - 只对优化师和管理员显示 */}
+      {ticket.status !== 'pending' && ticket.status !== 'assigned' &&
+       (user?.role === 'optimizer' || user?.role === 'admin') && (
         <div className="mb-6">
           <OptimizationHistory ticketId={ticket.id} />
         </div>
