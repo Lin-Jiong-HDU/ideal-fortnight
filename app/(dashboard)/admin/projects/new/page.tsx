@@ -159,7 +159,11 @@ export default function NewProjectPage() {
             <Label htmlFor="customerId">客户 *</Label>
             <Select
               value={formData.customerId}
-              onValueChange={(value) => setFormData({ ...formData, customerId: value })}
+              onValueChange={(value: string | null) => {
+                if (value) {
+                  setFormData({ ...formData, customerId: value });
+                }
+              }}
             >
               <SelectTrigger>
                 <SelectValue placeholder="选择客户" />
