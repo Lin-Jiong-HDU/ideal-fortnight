@@ -103,6 +103,9 @@ export const api = {
     getTickets: () =>
       request<Ticket[]>('/optimizer/tickets'),
 
+    getMyTickets: () =>
+      request<Ticket[]>('/optimizer/tickets/mine'),
+
     claimTicket: (id: string) =>
       request<{ message: string }>(`/optimizer/tickets/${id}/claim`, {
         method: 'POST',

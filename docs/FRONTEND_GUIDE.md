@@ -360,12 +360,17 @@ completed (我已通过，完成)
 
 | 接口 | 方法 | 角色 | 说明 |
 |------|------|------|------|
-| `/optimizer/tickets` | GET | admin/optimizer | 待处理工单池 |
+| `/optimizer/tickets` | GET | admin/optimizer | 待处理工单池（仅 pending 状态） |
+| `/optimizer/tickets/mine` | GET | admin/optimizer | 我的工单（已领取的所有状态） |
 | `/optimizer/tickets/:id/claim` | POST | admin/optimizer | 领取工单 |
 | `/optimizer/tickets/:id/process` | POST | admin/optimizer | 开始处理 |
 | `/optimizer/tickets/:id/optimize` | POST | admin/optimizer | 执行优化 |
 | `/optimizer/tickets/:id/result` | PUT | admin/optimizer | 提交结果 |
 | `/optimizer/tickets/:id/deliver` | POST | admin/optimizer | 交付工单 |
+
+> ⚠️ **重要接口区别**：
+> - `GET /optimizer/tickets` 返回**工单池**（所有 pending 状态的工单），用于优化师浏览可领取的工单
+> - `GET /optimizer/tickets/mine` 返回**当前优化师已领取的所有工单**（包括 assigned, processing, reviewing, completed 状态）
 
 ### 5.8 优化记录
 

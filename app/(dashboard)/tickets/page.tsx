@@ -29,9 +29,16 @@ export default function TicketsPage() {
     setIsLoading(true);
     try {
       // 根据角色调用不同的 API
-      const data = await (user?.role === 'customer'
-        ? api.customer.getTickets()
-        : api.optimizer.getTickets());
+      let data;
+      if (user?.role === 'customer') {
+        data = await api.customer.getTickets();
+      } else if (user?.role === 'optimizer') {
+        // optimizer 使用 getMyTickets 获取已领取的工单
+        data = await api.optimizer.getMyTickets();
+      } else {
+        // admin 使用 getTickets 获取所有工单
+        data = await api.optimizer.getTickets();
+      }
       setTickets(data);
     } catch (error) {
       console.error('Failed to fetch tickets:', error);
@@ -52,7 +59,7 @@ export default function TicketsPage() {
     <div className="p-8">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">
-          {user?.role === 'customer' ? '我的工单' : '工单列表'}
+          {user?.role === 'customer' || user?.role === 'optimizer' ? '我的工单' : '工单列表'}
         </h1>
         <div className="flex gap-3">
           <Button
