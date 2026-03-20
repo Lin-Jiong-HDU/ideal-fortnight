@@ -71,12 +71,9 @@ export const api = {
     getTickets: () =>
       request<Ticket[]>('/tickets'),
 
-    getProjects: async () => {
-      // 先获取当前客户信息，得到真实 customer ID
-      const customer = await request<Customer>('/customers/me');
-      // 再用真实 ID 获取项目列表
-      return request<Project[]>(`/customers/${customer.id}/projects`);
-    },
+    getProjects: () =>
+      // /projects 会自动根据当前用户角色过滤
+      request<Project[]>('/projects'),
 
     getTicket: (id: string) =>
       request<Ticket>(`/tickets/${id}`),
