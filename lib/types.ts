@@ -104,3 +104,26 @@ export interface CreateTicketRequest {
   sourceFileUrl?: string;
   needReview?: boolean;
 }
+
+// 优化记录
+export interface OptimizationRecord {
+  id: string;
+  ticketId: string;
+  optimizedContent: string;
+  scoreBefore: number;
+  scoreAfter: number;
+  strategies: string[];
+  targetAI: string[];
+  keywords: string[];
+  tokensUsed: number;
+  llmModel: string;
+  status: string;
+  createdAt: string;
+  completedAt: string | null;
+}
+
+// 优化策略类型
+export type OptimizationStrategy = 'structure' | 'schema' | 'answer_first' | 'authority' | 'faq';
+
+// 目标 AI 平台
+export type TargetAI = 'chatgpt' | 'perplexity' | 'google_ai' | 'claude';

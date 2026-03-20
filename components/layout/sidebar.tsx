@@ -14,11 +14,13 @@ interface NavItem {
 const navItemsByRole: Record<string, NavItem[]> = {
   admin: [
     { label: '工作台', href: '/dashboard', icon: '📊' },
+    { label: '工单池', href: '/optimizer/tickets', icon: '📥' },
     { label: '我的工单', href: '/tickets', icon: '📋' },
     { label: '创建工单', href: '/tickets/new', icon: '➕' },
   ],
   optimizer: [
     { label: '工作台', href: '/dashboard', icon: '📊' },
+    { label: '工单池', href: '/optimizer/tickets', icon: '📥' },
     { label: '我的工单', href: '/tickets', icon: '📋' },
     { label: '创建工单', href: '/tickets/new', icon: '➕' },
   ],

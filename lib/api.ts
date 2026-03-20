@@ -102,10 +102,47 @@ export const api = {
         method: 'POST',
       }),
 
-    optimizeTicket: (id: string) =>
-      request<{ message: string }>(`/optimizer/tickets/${id}/optimize`, {
+    processTicket: (id: string) =>
+      request<{ message: string }>(`/optimizer/tickets/${id}/process`, {
         method: 'POST',
       }),
+
+    optimizeTicket: (id: string, data: {
+      strategies: string[];
+      targetAI: string[];
+      keywords: string[];
+    }) =>
+      request<{
+        id: string;
+        optimizedContent: string;
+        scoreBefore: number;
+        scoreAfter: number;
+        strategies: string[];
+        targetAI: string[];
+        keywords: string[];
+      }>(`/optimizer/tickets/${id}/optimize`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
+
+    submitTicketResult: (id: string, data: {
+      optimizedContent: string;
+      scoreBefore: number;
+      scoreAfter: number;
+    }) =>
+      request<{ message: string }>(`/optimizer/tickets/${id}/result`, {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      }),
+
+    deliverTicket: (id: string) =>
+      request<{ message: string }>(`/optimizer/tickets/${id}/deliver`, {
+        method: 'POST',
+      }),
+
+    // 优化历史记录
+    getTicketOptimizations: (ticketId: string) =>
+      request<OptimizationRecord[]>(`/optimizer/tickets/${ticketId}/optimizations`),
   },
 
   // 客户信息
@@ -134,4 +171,4 @@ export const api = {
     }),
 };
 
-export type { Ticket, Customer, Project, User, TicketStatus } from './types';
+export type { Ticket, Customer, Project, User, TicketStatus, OptimizationRecord } from './types';
