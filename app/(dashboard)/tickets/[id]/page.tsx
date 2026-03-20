@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/contexts/AuthContext';
 import { api } from '@/lib/api';
@@ -10,9 +10,11 @@ import { Badge } from '@/components/ticket/ticket-status';
 import { Card, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 
-export default function TicketDetailPage({ params }: { params: { id: string } }) {
+export default function TicketDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
   const { user } = useAuth();
+  // Next.js 16: params is a Promise, unwrap with use()
+  const { id } = use(params);
   const [ticket, setTicket] = useState<Ticket | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [reviewComment, setReviewComment] = useState('');
@@ -22,7 +24,7 @@ export default function TicketDetailPage({ params }: { params: { id: string } })
   useEffect(() => {
     const fetchTicket = async () => {
       try {
-        const data = await api.customer.getTicket(params.id);
+        const data = await api.customer.getTicket(id);
         setTicket(data);
       } catch (error) {
         console.error('Failed to fetch ticket:', error);
@@ -33,7 +35,7 @@ export default function TicketDetailPage({ params }: { params: { id: string } })
     };
 
     fetchTicket();
-  }, [params.id]);
+  }, [id]);
 
   const handleReview = async (approved: boolean) => {
     if (!reviewComment.trim() && !approved) {
@@ -45,7 +47,7 @@ export default function TicketDetailPage({ params }: { params: { id: string } })
     setMessage('');
 
     try {
-      await api.customer.reviewTicket(params.id, approved, reviewComment);
+      await api.customer.reviewTicket(id, approved, reviewComment);
 
       if (approved) {
         setMessage('✅ 审核通过！');
