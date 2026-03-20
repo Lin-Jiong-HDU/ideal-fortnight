@@ -18,6 +18,7 @@ export default function NewTicketPage() {
     projectId: '',
     title: '',
     content: '',
+    sourceType: 'text', // 默认文本类型
     needReview: true,
   });
   const [error, setError] = useState('');
@@ -54,6 +55,7 @@ export default function NewTicketPage() {
         projectId: formData.projectId,
         title: formData.title,
         content: formData.content,
+        sourceType: formData.sourceType,
         needReview: formData.needReview,
       });
 
