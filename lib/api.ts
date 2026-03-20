@@ -234,6 +234,7 @@ export const api = {
       name: string;
       articles: number;
       price: number;
+      validDays: number;
     }) =>
       request<QuotaPackage>('/quota-packages', {
         method: 'POST',

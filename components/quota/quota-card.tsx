@@ -17,7 +17,7 @@ export function QuotaCard({ quota, onEdit }: QuotaCardProps) {
           <div>
             <h3 className="text-lg font-semibold">{quota.name}</h3>
             <p className="text-sm text-gray-500 mt-1">
-              {quota.articles} 篇章
+              {quota.articles} 篇章 · {quota.validDays} 天有效
             </p>
           </div>
           {onEdit && (
