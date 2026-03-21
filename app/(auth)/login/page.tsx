@@ -80,14 +80,6 @@ export default function LoginPage() {
               {isLoading ? '登录中...' : '登录'}
             </Button>
           </form>
-          <div className="mt-6 text-sm text-muted-foreground">
-            <p className="font-medium mb-2">测试账号：</p>
-            <div className="space-y-1 text-xs">
-              <p>Admin: admin@test.com / admin123</p>
-              <p>Optimizer: optimizer@test.com / optimizer123</p>
-              <p>Customer: customer@test.com / customer123</p>
-            </div>
-          </div>
         </CardContent>
       </Card>
     </div>
