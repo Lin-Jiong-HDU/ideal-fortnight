@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
+import type { User } from './types'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -29,7 +30,7 @@ export function parseJWT(token: string): { sub?: string; role?: string; exp?: nu
 /**
  * 用户数据类型守卫
  */
-function isValidUser(value: unknown): value is { id: string; email: string; name: string; role: string; createdAt: string } {
+function isValidUser(value: unknown): value is User {
   return (
     typeof value === 'object' &&
     value !== null &&
@@ -37,7 +38,10 @@ function isValidUser(value: unknown): value is { id: string; email: string; name
     'email' in value &&
     'name' in value &&
     'role' in value &&
-    'createdAt' in value
+    'createdAt' in value &&
+    ((value as Record<string, unknown>).role === 'admin' ||
+     (value as Record<string, unknown>).role === 'optimizer' ||
+     (value as Record<string, unknown>).role === 'customer')
   );
 }
 
