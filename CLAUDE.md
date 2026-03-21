@@ -16,17 +16,17 @@ This is a Next.js 16 application for a GEO (Generative Engine Optimization) cont
 ## Development Commands
 
 ```bash
-# Development server
-npm run dev
+# Development server (use pnpm)
+pnpm dev
 
 # Production build
-npm run build
+pnpm build
 
 # Start production server
-npm start
+pnpm start
 
 # Linting
-npm run lint
+pnpm lint
 ```
 
 ## Architecture
@@ -136,3 +136,11 @@ The backend API URL is configured via `NEXT_PUBLIC_API_URL` environment variable
 1. Create in `app/(dashboard)/tickets/[path]/page.tsx`
 2. Use api.customer or api.optimizer methods depending on user role
 3. Consider using optimization-history and ticket-status components
+
+## Test Accounts
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | admin@test.com | admin123 |
+| Optimizer | optimizer@test.com | optimizer123 |
+| Customer | customer@test.com | customer123 |
