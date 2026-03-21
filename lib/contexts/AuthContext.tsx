@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { api } from '../api';
+import { parseJWT, safeGetItem, safeSetItem, safeRemoveItem, isValidUser } from '../utils';
 import type { User } from '../types';
 
 interface AuthContextValue {
@@ -22,12 +23,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // 初始化：从 localStorage 读取 token
   useEffect(() => {
-    const storedToken = localStorage.getItem('accessToken');
-    const storedUser = localStorage.getItem('user');
+    const storedToken = safeGetItem<string>('accessToken');
+    const storedUser = safeGetItem<User>('user', isValidUser);
 
     if (storedToken && storedUser) {
       setToken(storedToken);
-      setUser(JSON.parse(storedUser));
+      setUser(storedUser);
     }
     setIsLoading(false);
   }, []);
@@ -35,27 +36,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string) => {
     const response = await api.login(email, password);
 
-    // 暂时存储一个模拟用户（实际应该从 /users/me 获取）
-    const mockUser: User = {
-      id: 'mock-id',
+    // 从 JWT 解析用户角色
+    const payload = parseJWT(response.accessToken);
+
+    const user: User = {
+      id: payload?.sub || email, // 使用 sub 或 email 作为 id
       email,
       name: email.split('@')[0],
-      role: email.includes('admin') ? 'admin' : email.includes('optimizer') ? 'optimizer' : 'customer',
+      role: (payload?.role as User['role']) || 'customer',
       createdAt: new Date().toISOString(),
     };
 
-    localStorage.setItem('accessToken', response.accessToken);
-    localStorage.setItem('refreshToken', response.refreshToken);
-    localStorage.setItem('user', JSON.stringify(mockUser));
+    // 安全存储
+    safeSetItem('accessToken', response.accessToken);
+    safeSetItem('refreshToken', response.refreshToken);
+    safeSetItem('user', user);
 
     setToken(response.accessToken);
-    setUser(mockUser);
+    setUser(user);
   };
 
   const logout = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('user');
+    safeRemoveItem('accessToken');
+    safeRemoveItem('refreshToken');
+    safeRemoveItem('user');
     setToken(null);
     setUser(null);
   };
