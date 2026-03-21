@@ -45,9 +45,7 @@ export const createUserSchema = z.object({
   name: z.string()
     .min(1, '请输入姓名')
     .max(50, '姓名不能超过 50 字符'),
-  role: z.enum(['admin', 'optimizer', 'customer'], {
-    errorMap: () => ({ message: '请选择有效的角色' }),
-  }),
+  role: z.enum(['admin', 'optimizer', 'customer'], '请选择有效的角色'),
 });
 
 export type CreateUserInput = z.infer<typeof createUserSchema>;
