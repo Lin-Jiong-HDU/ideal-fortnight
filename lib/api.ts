@@ -21,9 +21,6 @@ async function request<T>(
   // 添加 Authorization header（仅在 token 存在时）
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
-    console.log('[API] Request with token:', token.substring(0, 20) + '...');
-  } else {
-    console.log('[API] Request without token:', endpoint);
   }
 
   try {
