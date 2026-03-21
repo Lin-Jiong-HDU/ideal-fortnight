@@ -31,6 +31,7 @@ const navItemsByRole: Record<string, NavItem[]> = {
         { label: '项目管理', href: '/admin/projects', icon: '📁' },
       ],
     },
+    { label: '帮助中心', href: '/help', icon: '❓' },
   ],
   optimizer: [
     { label: '工作台', href: '/dashboard', icon: '📊' },
@@ -46,11 +47,13 @@ const navItemsByRole: Record<string, NavItem[]> = {
         { label: '项目列表', href: '/admin/projects', icon: '📁' },
       ],
     },
+    { label: '帮助中心', href: '/help', icon: '❓' },
   ],
   customer: [
     { label: '工作台', href: '/dashboard', icon: '📊' },
     { label: '我的工单', href: '/tickets', icon: '📋' },
     { label: '提交工单', href: '/tickets/new', icon: '➕' },
+    { label: '帮助中心', href: '/help', icon: '❓' },
   ],
 };
 
