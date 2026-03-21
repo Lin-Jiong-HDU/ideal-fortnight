@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import type { UserRole } from './types';
 
 /**
  * 登录表单验证
