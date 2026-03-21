@@ -1,4 +1,5 @@
 import type { Ticket, Customer, Project, User, UserRole, CreateTicketRequest, OptimizationRecord, OptimizationStrategy, TargetAI, QuotaPackage, QuotaHistory } from '@/lib/types';
+import { loginSchema, createTicketSchema, createUserSchema, createCustomerSchema, createProjectSchema, createQuotaPackageSchema } from '@/lib/validation';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
@@ -57,11 +58,13 @@ async function request<T>(
 // API 方法
 export const api = {
   // 认证
-  login: (email: string, password: string) =>
-    request<{ accessToken: string; refreshToken: string }>('/login', {
+  login: (email: string, password: string) => {
+    const validated = loginSchema.parse({ email, password });
+    return request<{ accessToken: string; refreshToken: string; user?: User }>('/login', {
       method: 'POST',
-      body: JSON.stringify({ email, password }),
-    }),
+      body: JSON.stringify(validated),
+    });
+  },
 
   // 客户工单 API (仅 customer 角色)
   customer: {
@@ -82,11 +85,13 @@ export const api = {
       sourceType?: string;
       sourceFileUrl?: string;
       needReview?: boolean;
-    }) =>
-      request<Ticket>('/tickets', {
+    }) => {
+      const validated = createTicketSchema.parse(data);
+      return request<Ticket>('/tickets', {
         method: 'POST',
-        body: JSON.stringify(data),
-      }),
+        body: JSON.stringify(validated),
+      });
+    },
 
     reviewTicket: (id: string, approved: boolean, comment: string) =>
       request<{ message: string }>(`/tickets/${id}/review`, {
@@ -190,11 +195,13 @@ export const api = {
       password: string;
       name: string;
       role: UserRole;
-    }) =>
-      request<User>('/users', {
+    }) => {
+      const validated = createUserSchema.parse(data);
+      return request<User>('/users', {
         method: 'POST',
-        body: JSON.stringify(data),
-      }),
+        body: JSON.stringify(validated),
+      });
+    },
 
     deleteUser: (id: string) =>
       request<{ message: string }>(`/users/${id}`, {
@@ -214,11 +221,13 @@ export const api = {
       contactPhone?: string;
       industry?: string;
       notes?: string;
-    }) =>
-      request<Customer>('/customers', {
+    }) => {
+      const validated = createCustomerSchema.parse(data);
+      return request<Customer>('/customers', {
         method: 'POST',
-        body: JSON.stringify(data),
-      }),
+        body: JSON.stringify(validated),
+      });
+    },
 
     updateCustomer: (id: string, data: {
       companyName?: string;
@@ -240,11 +249,13 @@ export const api = {
       articles: number;
       price: number;
       validDays: number;
-    }) =>
-      request<QuotaPackage>('/quota-packages', {
+    }) => {
+      const validated = createQuotaPackageSchema.parse(data);
+      return request<QuotaPackage>('/quota-packages', {
         method: 'POST',
-        body: JSON.stringify(data),
-      }),
+        body: JSON.stringify(validated),
+      });
+    },
 
     updateQuotaPackage: (id: string, data: {
       name?: string;
@@ -281,11 +292,13 @@ export const api = {
       description?: string;
       enterpriseInfo: Project['enterpriseInfo'];
       competitorInfo: Project['competitorInfo'];
-    }) =>
-      request<Project>('/projects', {
+    }) => {
+      const validated = createProjectSchema.parse(data);
+      return request<Project>('/projects', {
         method: 'POST',
-        body: JSON.stringify(data),
-      }),
+        body: JSON.stringify(validated),
+      });
+    },
 
     updateProject: (id: string, data: Partial<Project>) =>
       request<Project>(`/projects/${id}`, {
