@@ -36,8 +36,8 @@ export default function TicketsPage() {
         // optimizer 使用 getMyTickets 获取已领取的工单
         data = await api.optimizer.getMyTickets();
       } else {
-        // admin 使用 getTickets 获取所有工单
-        data = await api.optimizer.getTickets();
+        // admin 使用 getTickets('all') 获取所有工单
+        data = await api.optimizer.getTickets('all');
       }
       setTickets(data);
     } catch (error) {

@@ -481,8 +481,21 @@ POST /tickets/:id/review
 #### 获取待处理工单池
 
 ```
-GET /optimizer/tickets
+GET /optimizer/tickets?status={status}
 ```
+
+**查询参数：**
+- `status` (可选): 筛选状态
+  - `pending` - 待领取（默认）
+  - `assigned` - 已分配
+  - `processing` - 处理中
+  - `reviewing` - 待审核
+  - `completed` - 已完成
+  - `all` - 所有状态
+
+**权限说明：**
+- Optimizer: 只能看到 pending 状态，status 参数会被忽略
+- Admin: 可以使用 status 参数查看任意状态的工单
 
 **Response:**
 ```json

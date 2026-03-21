@@ -2,22 +2,45 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/lib/contexts/AuthContext';
 import { api } from '@/lib/api';
-import type { Ticket } from '@/lib/types';
+import type { Ticket, TicketStatus } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ticket/ticket-status';
 import { Card } from '@/components/ui/card';
 
+const statusFilters: { value: TicketStatus | 'all'; label: string }[] = [
+  { value: 'pending', label: '待领取' },
+  { value: 'assigned', label: '已分配' },
+  { value: 'processing', label: '处理中' },
+  { value: 'reviewing', label: '待审核' },
+  { value: 'completed', label: '已完成' },
+];
+
 export default function OptimizerTicketsPage() {
   const router = useRouter();
+  const { user } = useAuth();
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [claimingId, setClaimingId] = useState<string | null>(null);
+  const [statusFilter, setStatusFilter] = useState<TicketStatus | 'all'>('pending');
+
+  const isAdmin = user?.role === 'admin';
 
   const fetchTickets = async () => {
     setIsLoading(true);
     try {
-      const data = await api.optimizer.getTickets();
+      let data: Ticket[];
+
+      if (isAdmin) {
+        // admin 使用 status 参数获取对应状态的工单
+        const statusParam = statusFilter === 'all' ? 'all' : statusFilter;
+        data = await api.optimizer.getTickets(statusParam);
+      } else {
+        // optimizer 只能获取 pending 状态的工单
+        data = await api.optimizer.getTickets();
+      }
+
       setTickets(data);
     } catch (error) {
       console.error('Failed to fetch optimizer tickets:', error);
@@ -27,8 +50,10 @@ export default function OptimizerTicketsPage() {
   };
 
   useEffect(() => {
-    fetchTickets();
-  }, []);
+    if (user) {
+      fetchTickets();
+    }
+  }, [user, statusFilter]);
 
   const handleClaim = async (ticketId: string) => {
     setClaimingId(ticketId);
@@ -44,13 +69,20 @@ export default function OptimizerTicketsPage() {
     }
   };
 
-  // 只显示 pending 状态的工单
-  const pendingTickets = tickets.filter(t => t.status === 'pending');
+  // 只有 pending 状态的工单可以领取
+  const canClaim = (ticket: Ticket) => ticket.status === 'pending';
 
   return (
     <div className="p-8">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">工单池</h1>
+        <div>
+          <h1 className="text-2xl font-bold">{isAdmin ? '管理员工单池' : '工单池'}</h1>
+          {!isAdmin && (
+            <p className="text-sm text-muted-foreground mt-1">
+              显示待领取的工单
+            </p>
+          )}
+        </div>
         <Button
           variant="outline"
           onClick={fetchTickets}
@@ -60,24 +92,65 @@ export default function OptimizerTicketsPage() {
         </Button>
       </div>
 
+      {/* Admin 状态筛选器 */}
+      {isAdmin && (
+        <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+          <button
+            key="all"
+            onClick={() => setStatusFilter('all')}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
+              statusFilter === 'all'
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-background text-foreground hover:bg-muted'
+            }`}
+          >
+            全部
+          </button>
+          {statusFilters.map((item) => (
+            <button
+              key={item.value}
+              onClick={() => setStatusFilter(item.value)}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
+                statusFilter === item.value
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-background text-foreground hover:bg-muted'
+              }`}
+            >
+              {item.label} ({tickets.filter(t => t.status === item.value).length})
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* 统计信息 */}
       <div className="mb-6 p-4 bg-primary/10 rounded-lg">
         <p className="text-primary">
-          当前有 <span className="font-bold">{pendingTickets.length}</span> 个待领取工单
+          {isAdmin ? (
+            <span>
+              当前筛选: <span className="font-bold">{statusFilter === 'all' ? '全部' : statusFilters.find(s => s.value === statusFilter)?.label}</span>
+              ，共 <span className="font-bold">{tickets.length}</span> 个工单
+            </span>
+          ) : (
+            <span>
+              当前有 <span className="font-bold">{tickets.length}</span> 个待领取工单
+            </span>
+          )}
         </p>
       </div>
 
       {/* 工单列表 */}
       {isLoading ? (
         <div className="text-center py-12 text-muted-foreground">加载中...</div>
-      ) : pendingTickets.length === 0 ? (
+      ) : tickets.length === 0 ? (
         <Card className="p-12 text-center">
-          <p className="text-muted-foreground mb-4">🎉 暂无待处理工单</p>
-          <p className="text-sm text-muted-foreground">有新工单时会出现在这里</p>
+          <p className="text-muted-foreground mb-4">🎉 暂无工单</p>
+          <p className="text-sm text-muted-foreground">
+            {isAdmin ? '当前筛选条件下没有工单' : '有新工单时会出现在这里'}
+          </p>
         </Card>
       ) : (
         <div className="grid gap-4">
-          {pendingTickets.map((ticket) => (
+          {tickets.map((ticket) => (
             <Card key={ticket.id} className="p-6">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
@@ -95,13 +168,15 @@ export default function OptimizerTicketsPage() {
                 </div>
                 <div className="flex flex-col gap-3 items-end ml-4">
                   <Badge status={ticket.status} />
-                  <Button
-                    onClick={() => handleClaim(ticket.id)}
-                    disabled={claimingId === ticket.id}
-                    size="sm"
-                  >
-                    {claimingId === ticket.id ? '领取中...' : '领取'}
-                  </Button>
+                  {canClaim(ticket) && (
+                    <Button
+                      onClick={() => handleClaim(ticket.id)}
+                      disabled={claimingId === ticket.id}
+                      size="sm"
+                    >
+                      {claimingId === ticket.id ? '领取中...' : '领取'}
+                    </Button>
+                  )}
                 </div>
               </div>
             </Card>

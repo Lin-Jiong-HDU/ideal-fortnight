@@ -278,6 +278,14 @@ completed (我已通过，完成)
 │  - quotaUsed: 已使用                                        │
 │  - quotaExpireAt: 过期时间                                   │
 │                                                             │
+│  【配额消耗时机】                                             │
+│                                                             │
+│  配额在工单完成时自动扣除（quotaUsed +1）：                    │
+│  - needReview=true: 客户审核通过时扣除                       │
+│  - needReview=false: 优化师交付时直接扣除                    │
+│                                                             │
+│  配额消耗会自动记录到 quota_history 表。                      │
+│                                                             │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -360,7 +368,7 @@ completed (我已通过，完成)
 
 | 接口 | 方法 | 角色 | 说明 |
 |------|------|------|------|
-| `/optimizer/tickets` | GET | admin/optimizer | 待处理工单池（仅 pending 状态） |
+| `/optimizer/tickets?status={status}` | GET | admin/optimizer | 工单池（支持状态筛选） |
 | `/optimizer/tickets/mine` | GET | admin/optimizer | 我的工单（已领取的所有状态） |
 | `/optimizer/tickets/:id/claim` | POST | admin/optimizer | 领取工单 |
 | `/optimizer/tickets/:id/process` | POST | admin/optimizer | 开始处理 |
@@ -368,8 +376,18 @@ completed (我已通过，完成)
 | `/optimizer/tickets/:id/result` | PUT | admin/optimizer | 提交结果 |
 | `/optimizer/tickets/:id/deliver` | POST | admin/optimizer | 交付工单 |
 
-> ⚠️ **重要接口区别**：
-> - `GET /optimizer/tickets` 返回**工单池**（所有 pending 状态的工单），用于优化师浏览可领取的工单
+**查询参数说明：**
+- `status` (可选): 筛选工单状态
+  - `pending` - 待领取（默认）
+  - `assigned` - 已分配
+  - `processing` - 处理中
+  - `reviewing` - 待审核
+  - `completed` - 已完成
+  - `all` - 所有状态
+
+> ⚠️ **重要权限区别**：
+> - **Admin**: 可以使用 `status` 参数查看任意状态的工单，实现全局视图
+> - **Optimizer**: `status` 参数会被忽略，始终只能看到 `pending` 状态的工单（待领取）
 > - `GET /optimizer/tickets/mine` 返回**当前优化师已领取的所有工单**（包括 assigned, processing, reviewing, completed 状态）
 
 ### 5.8 优化记录
@@ -448,6 +466,62 @@ async function pollTicketStatus(ticketId) {
 }
 ```
 
+### 场景5：管理员工单池状态筛选（新功能）
+
+**用户故事：** "我是管理员，想要在一个页面通过标签页切换查看所有状态的工单。"
+
+```javascript
+// Admin 专用的工单池组件，支持状态筛选
+function AdminTicketPool() {
+  const [activeTab, setActiveTab] = useState('pending');
+  const [tickets, setTickets] = useState([]);
+
+  const tabs = [
+    { value: 'pending', label: '待领取', count: 0 },
+    { value: 'assigned', label: '已分配', count: 0 },
+    { value: 'processing', label: '处理中', count: 0 },
+    { value: 'reviewing', label: '待审核', count: 0 },
+    { value: 'completed', label: '已完成', count: 0 },
+    { value: 'all', label: '全部', count: 0 }
+  ];
+
+  // 获取指定状态的工单
+  const fetchTicketsByStatus = async (status) => {
+    const response = await api.get(`/optimizer/tickets?status=${status}`);
+    setTickets(response.data);
+    // 更新标签页计数
+    updateTabCounts(response.data);
+  };
+
+  // 切换标签页
+  const handleTabChange = (newStatus) => {
+    setActiveTab(newStatus);
+    fetchTicketsByStatus(newStatus);
+  };
+
+  return (
+    <div>
+      {/* 标签页导航 */}
+      <Tabs value={activeTab} onChange={handleTabChange}>
+        {tabs.map(tab => (
+          <Tab key={tab.value} value={tab.value}>
+            {tab.label} ({tab.count})
+          </Tab>
+        ))}
+      </Tabs>
+
+      {/* 工单列表 */}
+      <TicketList tickets={tickets} />
+    </div>
+  );
+}
+```
+
+**重要提示：**
+- 此功能**仅对 Admin 角色可用**
+- Optimizer 角色访问此接口时，`status` 参数会被忽略，始终只显示待领取工单
+- 前端应根据用户角色决定是否显示状态筛选功能
+
 ---
 
 ## 7. 错误处理
@@ -469,6 +543,22 @@ async function pollTicketStatus(ticketId) {
 | 403 | 权限不足 | 显示"无权限访问"提示 |
 | 404 | 资源不存在 | 显示"数据不存在"或跳转列表页 |
 | 500 | 服务器错误 | 显示"系统繁忙，请稍后重试" |
+
+### 状态参数错误处理
+
+当使用 `/optimizer/tickets?status={status}` 时：
+
+```javascript
+// 错误的 status 值会返回 400
+try {
+  const response = await api.get('/optimizer/tickets?status=invalid');
+} catch (error) {
+  if (error.response?.status === 400) {
+    // 显示错误提示
+    showError('Invalid status parameter. Valid values: pending, assigned, processing, reviewing, completed, all');
+  }
+}
+```
 
 ---
 

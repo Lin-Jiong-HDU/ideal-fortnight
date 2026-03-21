@@ -18,9 +18,21 @@ export default function DashboardPage() {
     const fetchData = async () => {
       try {
         // 根据角色调用不同的 API
-        const ticketsData = await (user?.role === 'customer'
-          ? api.customer.getTickets()
-          : api.optimizer.getTickets());
+        let ticketsData: Ticket[] = [];
+
+        if (user?.role === 'customer') {
+          ticketsData = await api.customer.getTickets();
+        } else if (user?.role === 'optimizer') {
+          // 优化师需要同时获取工单池和我的工单
+          const [poolTickets, myTickets] = await Promise.all([
+            api.optimizer.getTickets(),
+            api.optimizer.getMyTickets(),
+          ]);
+          ticketsData = [...poolTickets, ...myTickets];
+        } else {
+          // admin 使用 status=all 获取所有工单
+          ticketsData = await api.optimizer.getTickets('all');
+        }
 
         setTickets(ticketsData);
 
@@ -144,9 +156,13 @@ export default function DashboardPage() {
 
   // Admin/Optimizer Dashboard
   const pending = tickets.filter(t => t.status === 'pending').length;
-  const processing = tickets.filter(t => t.status === 'processing').length;
+  // 进行中包含已分配和处理中的工单
+  const processing = tickets.filter(t => t.status === 'assigned' || t.status === 'processing').length;
   const completed = tickets.filter(t => t.status === 'completed').length;
-  const recentTickets = tickets.slice(0, 5);
+  // 最近工单按创建时间倒序排列
+  const recentTickets = [...tickets]
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, 5);
 
   return (
     <div className="p-8">

@@ -100,8 +100,8 @@ export const api = {
 
   // 优化器工单 API (admin 和 optimizer 角色)
   optimizer: {
-    getTickets: () =>
-      request<Ticket[]>('/optimizer/tickets'),
+    getTickets: (status?: 'pending' | 'assigned' | 'processing' | 'reviewing' | 'completed' | 'all') =>
+      request<Ticket[]>(status ? `/optimizer/tickets?status=${status}` : '/optimizer/tickets'),
 
     getMyTickets: () =>
       request<Ticket[]>('/optimizer/tickets/mine'),
