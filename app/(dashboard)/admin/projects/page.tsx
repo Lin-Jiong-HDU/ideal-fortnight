@@ -1,4 +1,5 @@
 'use client';
+import logger from '@/lib/logger';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -31,7 +32,7 @@ export default function ProjectsPage() {
       });
       setCustomers(customersMap);
     } catch (error) {
-      console.error('Failed to fetch data:', error);
+      logger.error('Failed to fetch data:', error);
     } finally {
       setIsLoading(false);
     }
@@ -55,7 +56,7 @@ export default function ProjectsPage() {
       setDeleteDialogOpen(false);
       await fetchData();
     } catch (error) {
-      console.error('Failed to delete project:', error);
+      logger.error('Failed to delete project:', error);
       alert('删除失败：' + (error instanceof Error ? error.message : '未知错误'));
     } finally {
       setIsDeleting(false);

@@ -1,4 +1,5 @@
 'use client';
+import logger from '@/lib/logger';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -41,7 +42,7 @@ export default function TicketsPage() {
       }
       setTickets(data);
     } catch (error) {
-      console.error('Failed to fetch tickets:', error);
+      logger.error('Failed to fetch tickets:', error);
     } finally {
       setIsLoading(false);
     }

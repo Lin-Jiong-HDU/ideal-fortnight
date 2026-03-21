@@ -1,4 +1,5 @@
 'use client';
+import logger from '@/lib/logger';
 
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -50,7 +51,7 @@ export default function QuotasPage() {
       const data = await api.admin.getQuotaPackages();
       setPackages(data);
     } catch (error) {
-      console.error('Failed to fetch quota packages:', error);
+      logger.error('Failed to fetch quota packages:', error);
     }
   };
 
@@ -59,7 +60,7 @@ export default function QuotasPage() {
       const data = await api.admin.getCustomers();
       setCustomers(data);
     } catch (error) {
-      console.error('Failed to fetch customers:', error);
+      logger.error('Failed to fetch customers:', error);
     }
   };
 
@@ -68,7 +69,7 @@ export default function QuotasPage() {
       const data = await api.admin.getQuotaHistory(customerId);
       setQuotaHistory(data);
     } catch (error) {
-      console.error('Failed to fetch quota history:', error);
+      logger.error('Failed to fetch quota history:', error);
     }
   };
 
@@ -112,7 +113,7 @@ export default function QuotasPage() {
       resetPackageForm();
       await fetchPackages();
     } catch (error) {
-      console.error('Failed to save package:', error);
+      logger.error('Failed to save package:', error);
       alert('保存失败：' + (error instanceof Error ? error.message : '未知错误'));
     } finally {
       setIsSubmittingPackage(false);
@@ -179,7 +180,7 @@ export default function QuotasPage() {
       }
       alert('充值成功！');
     } catch (error) {
-      console.error('Failed to recharge:', error);
+      logger.error('Failed to recharge:', error);
       alert('充值失败：' + (error instanceof Error ? error.message : '未知错误'));
     } finally {
       setIsSubmittingRecharge(false);

@@ -1,4 +1,5 @@
 'use client';
+import logger from '@/lib/logger';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -43,7 +44,7 @@ export default function OptimizerTicketsPage() {
 
       setTickets(data);
     } catch (error) {
-      console.error('Failed to fetch optimizer tickets:', error);
+      logger.error('Failed to fetch optimizer tickets:', error);
     } finally {
       setIsLoading(false);
     }
@@ -62,7 +63,7 @@ export default function OptimizerTicketsPage() {
       // 重新获取列表
       await fetchTickets();
     } catch (error) {
-      console.error('Failed to claim ticket:', error);
+      logger.error('Failed to claim ticket:', error);
       alert('领取失败：' + (error instanceof Error ? error.message : '未知错误'));
     } finally {
       setClaimingId(null);

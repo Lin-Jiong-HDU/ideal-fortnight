@@ -1,4 +1,5 @@
 'use client';
+import logger from '@/lib/logger';
 
 import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
@@ -19,7 +20,7 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
         const data = await api.admin.getUser(id);
         setUser(data);
       } catch (error) {
-        console.error('Failed to fetch user:', error);
+        logger.error('Failed to fetch user:', error);
       } finally {
         setIsLoading(false);
       }

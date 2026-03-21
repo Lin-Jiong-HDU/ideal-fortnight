@@ -1,4 +1,5 @@
 'use client';
+import logger from '@/lib/logger';
 
 import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
@@ -21,7 +22,7 @@ export function OptimizationHistory({ ticketId }: OptimizationHistoryProps) {
         const data = await api.optimizer.getTicketOptimizations(ticketId);
         setOptimizations(data);
       } catch (error) {
-        console.error('Failed to fetch optimizations:', error);
+        logger.error('Failed to fetch optimizations:', error);
       } finally {
         setIsLoading(false);
       }

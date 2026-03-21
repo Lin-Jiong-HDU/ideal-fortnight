@@ -1,4 +1,5 @@
 'use client';
+import logger from '@/lib/logger';
 
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -38,7 +39,7 @@ export default function CustomersPage() {
       const data = await api.admin.getCustomers();
       setCustomers(data);
     } catch (error) {
-      console.error('Failed to fetch customers:', error);
+      logger.error('Failed to fetch customers:', error);
     } finally {
       setIsLoading(false);
     }
@@ -50,7 +51,7 @@ export default function CustomersPage() {
       // 只显示 customer 角色的用户
       setUsers(data.filter(u => u.role === 'customer'));
     } catch (error) {
-      console.error('Failed to fetch users:', error);
+      logger.error('Failed to fetch users:', error);
     }
   };
 
@@ -78,7 +79,7 @@ export default function CustomersPage() {
       setDialogOpen(false);
       await fetchCustomers();
     } catch (error) {
-      console.error('Failed to save customer:', error);
+      logger.error('Failed to save customer:', error);
       alert('保存失败：' + (error instanceof Error ? error.message : '未知错误'));
     } finally {
       setIsSubmitting(false);

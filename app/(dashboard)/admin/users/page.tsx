@@ -1,4 +1,5 @@
 'use client';
+import logger from '@/lib/logger';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -34,7 +35,7 @@ export default function UsersPage() {
       const data = await api.admin.getUsers();
       setUsers(data);
     } catch (error) {
-      console.error('Failed to fetch users:', error);
+      logger.error('Failed to fetch users:', error);
     } finally {
       setIsLoading(false);
     }
@@ -52,7 +53,7 @@ export default function UsersPage() {
       setFormData({ email: '', password: '', name: '', role: 'customer' });
       await fetchUsers();
     } catch (error) {
-      console.error('Failed to create user:', error);
+      logger.error('Failed to create user:', error);
       alert('创建失败：' + (error instanceof Error ? error.message : '未知错误'));
     } finally {
       setIsSubmitting(false);
@@ -68,7 +69,7 @@ export default function UsersPage() {
       setSelectedUser(null);
       await fetchUsers();
     } catch (error) {
-      console.error('Failed to delete user:', error);
+      logger.error('Failed to delete user:', error);
       alert('删除失败：' + (error instanceof Error ? error.message : '未知错误'));
     } finally {
       setIsSubmitting(false);

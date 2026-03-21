@@ -1,4 +1,5 @@
 'use client';
+import logger from '@/lib/logger';
 
 import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
@@ -24,7 +25,7 @@ export default function CustomerDetailPage({
       const data = await api.admin.getCustomer(id);
       setCustomer(data);
     } catch (error) {
-      console.error('Failed to fetch customer:', error);
+      logger.error('Failed to fetch customer:', error);
     } finally {
       setIsLoading(false);
     }

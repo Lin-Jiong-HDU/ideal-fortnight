@@ -1,4 +1,5 @@
 'use client';
+import logger from '@/lib/logger';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -38,7 +39,7 @@ export default function NewTicketPage() {
         const data = await api.customer.getProjects();
         setProjects(data);
       } catch (err) {
-        console.error('Failed to fetch projects:', err);
+        logger.error('Failed to fetch projects:', err);
       } finally {
         setIsLoadingProjects(false);
       }

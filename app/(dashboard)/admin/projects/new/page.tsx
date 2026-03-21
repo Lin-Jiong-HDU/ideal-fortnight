@@ -1,4 +1,5 @@
 'use client';
+import logger from '@/lib/logger';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -56,7 +57,7 @@ export default function NewProjectPage() {
         const data = await api.admin.getCustomers();
         setCustomers(data);
       } catch (error) {
-        console.error('Failed to fetch customers:', error);
+        logger.error('Failed to fetch customers:', error);
       } finally {
         setIsLoading(false);
       }
@@ -123,7 +124,7 @@ export default function NewProjectPage() {
 
       router.push('/admin/projects');
     } catch (error) {
-      console.error('Failed to create project:', error);
+      logger.error('Failed to create project:', error);
       alert('创建失败：' + (error instanceof Error ? error.message : '未知错误'));
     } finally {
       setIsSubmitting(false);

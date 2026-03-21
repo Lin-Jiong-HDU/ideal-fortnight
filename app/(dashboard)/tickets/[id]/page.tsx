@@ -1,4 +1,5 @@
 'use client';
+import logger from '@/lib/logger';
 
 import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
@@ -57,7 +58,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
         const data = await api.getTicket(id);
         setTicket(data);
       } catch (error) {
-        console.error('Failed to fetch ticket:', error);
+        logger.error('Failed to fetch ticket:', error);
         setMessage('获取工单详情失败');
       } finally {
         setIsLoading(false);
