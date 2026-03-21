@@ -1,5 +1,6 @@
 import type { Ticket, Customer, Project, User, UserRole, CreateTicketRequest, OptimizationRecord, OptimizationStrategy, TargetAI, QuotaPackage, QuotaHistory } from '@/lib/types';
 import { loginSchema, createTicketSchema, createUserSchema, createCustomerSchema, createProjectSchema, createQuotaPackageSchema } from '@/lib/validation';
+import { safeGetItem, safeRemoveItem } from './utils';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
@@ -11,7 +12,7 @@ async function request<T>(
   // 确保只在浏览器环境获取 token
   let token = null;
   if (typeof window !== 'undefined') {
-    token = localStorage.getItem('accessToken');
+    token = safeGetItem<string>('accessToken');
   }
 
   const headers: Record<string, string> = {
@@ -33,8 +34,8 @@ async function request<T>(
     // 401 未授权 - 清除 token，跳转登录
     if (response.status === 401) {
       if (typeof window !== 'undefined') {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
+        safeRemoveItem('accessToken');
+        safeRemoveItem('refreshToken');
         window.location.href = '/login';
       }
       throw new Error('Unauthorized');
