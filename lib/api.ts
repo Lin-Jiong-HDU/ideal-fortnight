@@ -2,7 +2,11 @@ import type { Ticket, Customer, Project, User, UserRole, CreateTicketRequest, Op
 import { loginSchema, createTicketSchema, createUserSchema, createCustomerSchema, createProjectSchema, createQuotaPackageSchema } from '@/lib/validation';
 import { safeGetItem, safeRemoveItem } from './utils';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+// 生产环境使用相对路径，由 nginx 代理到后端
+// 开发环境使用 localhost:8080
+const BASE_URL = process.env.NODE_ENV === 'production'
+  ? '/api'
+  : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080');
 
 // 统一请求处理
 async function request<T>(
