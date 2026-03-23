@@ -11,7 +11,8 @@ module.exports = {
     env: {
       NODE_ENV: 'production',
       PORT: 3000,
-      NEXT_PUBLIC_API_URL: 'http://localhost:8080',
+      // 生产环境使用相对路径，由 nginx 代理
+      NEXT_PUBLIC_API_URL: '/api',
     },
   }],
 };
