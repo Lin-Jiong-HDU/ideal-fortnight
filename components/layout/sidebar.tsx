@@ -80,8 +80,20 @@ export function Sidebar() {
   };
 
   const isItemActive = (item: NavItem): boolean => {
-    if (pathname === item.href || pathname.startsWith(item.href + '/')) {
+    // 精确匹配或子路径匹配（排除父路径被错误匹配）
+    if (pathname === item.href) {
       return true;
+    }
+    // 只有当 href 不是其他项的子路径时才使用 startsWith
+    if (pathname.startsWith(item.href + '/')) {
+      // 检查是否有更精确的匹配（更长的 href）
+      const allItems = navItems.flatMap((i) => [i, ...(i.subitems || [])]);
+      const hasMoreSpecificMatch = allItems.some(
+        (other) => other.href !== item.href && other.href.startsWith(item.href + '/') && pathname.startsWith(other.href)
+      );
+      if (!hasMoreSpecificMatch) {
+        return true;
+      }
     }
     if (item.subitems) {
       return item.subitems.some((subitem) => pathname === subitem.href || pathname.startsWith(subitem.href + '/'));
@@ -138,7 +150,7 @@ export function Sidebar() {
     <aside className="w-64 bg-card border-r border-border flex flex-col h-screen sticky top-0">
       {/* Logo */}
       <div className="p-6 border-b border-border">
-        <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-xl font-bold text-primary">
           GEO 优化平台
         </h1>
       </div>
@@ -151,7 +163,7 @@ export function Sidebar() {
       {/* User Info */}
       <div className="p-4 border-t border-border">
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-medium">
+          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-medium">
             {user.name.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
