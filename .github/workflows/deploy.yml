@@ -19,6 +19,10 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
+            # 加载环境变量
+            source ~/.bashrc 2>/dev/null || true
+            source ~/.nvm/nvm.sh 2>/dev/null || true
+
             cd ${{ secrets.SERVER_PROJECT_PATH }}
 
             # 拉取最新代码
